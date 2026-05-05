@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Job Offer Comparison Tool · New Grad Finances</title>
+<link href="https://fonts.googleapis.com/css2?family=Carlito:wght@400;700&family=DM+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --accent:#0d9488;--green:#22c55e;--green-glow:rgba(34,197,94,0.22);
+  --bg:#eaede8;--surface:#f6f5f1;--stone:#292524;--muted:#78716c;--border:#d3d0c9;
+  --red:#dc2626;--pos:#0d9488;--amber:#d97706;
+  --green-bg:#edfaf4;--green-row-border:#a7f3d0;
+  --red-bg:#fef2f2;--red-row-border:#fecaca;
+  --navy:#1c2b3a;
+  --input-bg:#ebf5fb;--input-border:#93c6e7;--input-text:#1a56db;
+  --calc-bg:#f3f4f6;--calc-text:#6b7280;
+  --mono:"DM Mono",monospace;--sans:"Carlito","Calibri",sans-serif;
+}
+body{font-family:var(--sans);background:var(--bg);color:var(--stone);padding:0 0 3rem;min-height:100vh}
+.shell{max-width:720px;margin:0 auto;padding:0 1rem}
+.header-bar{background:var(--navy);padding:.9rem 1.5rem;display:flex;align-items:center;gap:14px;margin-bottom:1.5rem}
+.logo-circle{width:52px;height:52px;border-radius:50%;border:2px solid rgba(13,148,136,0.5);flex-shrink:0;background:#0d1520;display:flex;align-items:center;justify-content:center}
+.brand-text{flex:1}
+.brand-name{font-size:16px;font-weight:700;letter-spacing:.05em;color:#fff;line-height:1.15;text-transform:uppercase}
+.brand-name span{color:var(--accent)}
+.brand-tagline{font-family:var(--mono);font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.38);margin-top:2px}
+.brand-tool{font-family:var(--mono);font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--accent);margin-top:5px;border-top:1px solid rgba(13,148,136,.3);padding-top:4px}
+.legend{display:flex;gap:16px;margin-bottom:1.2rem;flex-wrap:wrap}
+.legend-item{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)}
+.legend-swatch{width:28px;height:14px;border-radius:4px;flex-shrink:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.1rem 1.25rem;transition:border-color .3s,box-shadow .3s}
+.card.winner{border:2px solid var(--green);box-shadow:0 0 0 4px var(--green-glow)}
+.offer-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem}
+.offer-num{font-family:var(--mono);font-size:32px;font-weight:600;letter-spacing:-.02em;line-height:1;color:var(--stone)}
+.offer-sub{font-size:11px;color:var(--muted);margin-top:.25rem}
+.winner-badge{display:inline-block;background:var(--green);color:#fff;font-family:var(--mono);font-size:9px;letter-spacing:.12em;padding:3px 9px;border-radius:20px;margin-bottom:.45rem;text-transform:uppercase}
+.data-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:12px}
+.col-heads{display:grid;grid-template-columns:1.9fr 1fr 1fr;padding:.3rem 1.25rem}
+.col-head{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-align:right}
+.section-label{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;padding:.45rem 1.25rem .3rem;font-weight:600}
+.section-label.income{background:var(--green-bg);color:#166534;border-top:1px solid var(--green-row-border);border-bottom:1px solid var(--green-row-border)}
+.section-label.benefits{background:var(--green-bg);color:#166534;border-top:1px solid var(--green-row-border);border-bottom:1px solid var(--green-row-border)}
+.section-label.costs{background:var(--red-bg);color:#991b1b;border-top:1px solid var(--red-row-border);border-bottom:1px solid var(--red-row-border)}
+.comp-row{display:grid;grid-template-columns:1.9fr 1fr 1fr;align-items:start;padding:.42rem 1.25rem;border-bottom:1px solid var(--border)}
+.comp-row.income-row{background:var(--green-bg)}
+.comp-row.benefits-row{background:var(--green-bg)}
+.comp-row.costs-row{background:var(--red-bg)}
+.calc-row{display:grid;grid-template-columns:1.9fr 1fr 1fr;align-items:center;padding:.32rem 1.25rem;border-bottom:1px solid var(--border);background:var(--calc-bg)}
+.calc-label{font-size:11px;color:var(--calc-text);font-style:italic}
+.calc-val{font-family:var(--mono);font-size:12px;color:var(--calc-text);text-align:right}
+.comp-row-with-comment{display:grid;grid-template-columns:1.9fr 1fr 1fr;align-items:start;padding:.42rem 1.25rem;border-bottom:1px solid var(--border)}
+.comp-row-with-comment.costs-row{background:var(--red-bg)}
+.comment-row{grid-column:1/-1;padding-bottom:.3rem}
+.row-label{font-size:13px;color:var(--stone)}
+.row-note{font-size:11px;color:var(--muted);margin-top:1px}
+.val{font-family:var(--mono);font-size:13px;font-weight:600;text-align:right;color:var(--stone);display:flex;align-items:center;justify-content:flex-end;gap:2px}
+.val.pos{color:var(--pos)}
+.val.neg{color:var(--red)}
+.val.accent{color:var(--accent)}
+.unit{font-size:10px;color:var(--muted);white-space:nowrap;font-weight:400}
+.editable{font-family:var(--mono);font-size:13px;font-weight:600;border:1px solid var(--input-border);background:var(--input-bg);color:var(--input-text);text-align:right;border-radius:5px;padding:2px 5px;width:100%;outline:none;cursor:text;min-width:0}
+.editable:focus{border-color:var(--accent);background:#fff}
+.comment-input{width:100%;font-family:var(--sans);font-size:11px;background:rgba(255,255,255,.7);border:1px solid var(--border);border-radius:6px;padding:4px 7px;color:var(--stone);resize:none;outline:none;margin-top:4px}
+.comment-input:focus{border-color:var(--accent)}
+.total-bar{background:var(--navy);border-radius:14px;padding:1.2rem 1.5rem;margin:12px 0}
+.total-row{display:grid;grid-template-columns:1.9fr 1fr 1fr;align-items:baseline}
+.total-label{font-size:17px;font-weight:700;color:#fff}
+.total-val{font-family:var(--mono);font-size:30px;font-weight:600;text-align:right;letter-spacing:-.02em}
+.total-val.t1{color:rgba(255,255,255,.45)}
+.total-val.t2{color:var(--accent)}
+.diff-row{display:grid;grid-template-columns:1.9fr 1fr 1fr;margin-top:.6rem;padding-top:.6rem;border-top:1px solid rgba(255,255,255,.1)}
+.diff-label{font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.35)}
+.diff-val{font-family:var(--mono);font-size:12px;font-weight:600;text-align:right;color:rgba(255,255,255,.35)}
+.diff-val.hi{color:var(--accent)}
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.1rem 1.25rem;margin-bottom:12px}
+.chart-title{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.9rem}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.bar-label{font-size:12px;color:var(--stone);width:148px;flex-shrink:0;line-height:1.3}
+.bar-track{flex:1;background:var(--border);border-radius:3px;height:5px}
+.bar-fill{height:5px;border-radius:3px}
+.bar-fill.b1{background:var(--muted);opacity:.55}
+.bar-fill.b2{background:var(--accent)}
+.bar-val{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--muted);width:68px;text-align:right;flex-shrink:0}
+.qual-section{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.1rem 1.25rem;margin-bottom:12px}
+.qual-title{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem}
+.qual-header{display:grid;grid-template-columns:1fr 100px 120px;gap:4px;padding-bottom:.4rem;border-bottom:1px solid var(--border);margin-bottom:.2rem}
+.qcol-head{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:center}
+.qual-row{display:grid;grid-template-columns:1fr 100px 120px;align-items:center;padding:.46rem 0;border-bottom:1px solid var(--border);gap:6px}
+.qual-row:last-child{border-bottom:none}
+.qual-label{font-size:12px;color:var(--stone);line-height:1.4}
+.qual-select{font-family:var(--sans);font-size:12px;font-weight:700;border:1px solid var(--input-border);background:var(--input-bg);color:var(--input-text);border-radius:7px;padding:5px 8px;outline:none;cursor:pointer;width:100%;text-align:center}
+.qual-select:focus{border-color:var(--accent)}
+.qual-select.selected-a{background:#edfaf4;border-color:#0d9488;color:#0d9488}
+.qual-select.selected-b{background:#eff6ff;border-color:#1d4ed8;color:#1d4ed8}
+.qual-select.selected-s{background:#fef9ee;border-color:#d97706;color:#d97706}
+.qual-note{font-size:11px;font-family:var(--sans);background:rgba(255,255,255,.7);border:1px solid var(--border);border-radius:6px;padding:5px 8px;color:var(--stone);outline:none;width:100%}
+.qual-note:focus{border-color:var(--accent)}
+.qual-tally{display:flex;justify-content:space-between;align-items:center;margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--border)}
+.tally-label{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.tally-scores{display:flex;gap:18px}
+.tally-item{text-align:center}
+.tally-num{font-family:var(--mono);font-size:20px;font-weight:600}
+.tally-num.ta{color:var(--accent)}
+.tally-num.tb{color:#1d4ed8}
+.tally-num.ts{color:var(--amber)}
+.tally-sub{font-family:var(--mono);font-size:9px;color:var(--muted)}
+.export-row{display:flex;gap:8px;margin-top:.5rem;flex-wrap:wrap}
+.btn{font-family:var(--sans);font-size:13px;font-weight:700;padding:8px 18px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--stone);cursor:pointer;transition:background .15s;text-decoration:none;display:inline-block}
+.btn:hover{background:var(--border)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover{opacity:.88}
+.job-name-input{font-family:var(--sans);font-size:13px;font-weight:700;border:none;background:transparent;color:var(--stone);outline:none;cursor:text;width:100%;padding:0}
+.job-name-input:focus{border-bottom:1px solid var(--accent)}
+@media(max-width:520px){
+  .grid2{grid-template-columns:1fr}
+  .col-heads,.comp-row,.calc-row,.total-row,.diff-row{grid-template-columns:1.4fr 1fr 1fr}
+  .offer-num{font-size:24px}
+  .total-val{font-size:22px}
+}
+</style>
+</head>
+<body>
+
+<div class="header-bar">
+  <div class="logo-circle">
+    <svg viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" width="38" height="38">
+      <circle cx="19" cy="14" r="10" stroke="#0d9488" stroke-width="1.5" fill="none"/>
+      <path d="M11 14 L19 6 L27 14" stroke="#4db8c8" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <path d="M16 14 L19 10 L22 14" stroke="#4db8c8" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      <path d="M19 10 L19 24" stroke="#4db8c8" stroke-width="1" stroke-dasharray="2 2"/>
+      <rect x="17.5" y="4.5" width="3" height="2.5" rx="0.4" fill="#0d9488"/>
+      <line x1="8" y1="24" x2="30" y2="24" stroke="#0d9488" stroke-width="1.2"/>
+      <line x1="6" y1="24" x2="8" y2="24" stroke="#0d9488" stroke-width="2" stroke-linecap="round"/>
+      <line x1="30" y1="24" x2="32" y2="24" stroke="#0d9488" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <div class="brand-text">
+    <div class="brand-name">New Grad <span>Finances</span></div>
+    <div class="brand-tagline">Plan Today. Build Tomorrow.</div>
+    <div class="brand-tool">Job Offer Comparison Tool</div>
+  </div>
+</div>
+
+<div class="shell">
+  <div class="legend">
+    <div class="legend-item"><div class="legend-swatch" style="background:#ebf5fb;border:1px solid #93c6e7"></div>Blue = enter your data</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#f3f4f6;border:1px solid #d3d0c9"></div>Gray = auto-calculated</div>
+  </div>
+
+  <div class="grid2">
+    <div class="card" id="card1">
+      <div class="offer-label" id="label1"><input class="job-name-input" id="jobname1" value="Job A — Clinic" oninput="updateColHeads()"></div>
+      <div class="offer-num" id="disp-total1">—</div>
+      <div class="offer-sub">est. annual take-home comp</div>
+    </div>
+    <div class="card winner" id="card2">
+      <div class="offer-label" id="label2"><span class="winner-badge">current leader</span><br><input class="job-name-input" id="jobname2" value="Job B — Hospital" oninput="updateColHeads()"></div>
+      <div class="offer-num" id="disp-total2">—</div>
+      <div class="offer-sub">est. annual take-home comp</div>
+    </div>
+  </div>
+
+  <div class="data-card">
+    <div class="col-heads"><div></div><div class="col-head" id="head1">Job A</div><div class="col-head" id="head2">Job B</div></div>
+
+    <div class="section-label income">&#x1F4B0; income</div>
+    <div class="comp-row income-row"><div><div class="row-label">Base salary</div></div><div class="val"><input class="editable" id="b3" value="72000" oninput="calc()"></div><div class="val accent"><input class="editable" id="c3" value="64000" oninput="calc()"></div></div>
+    <div class="comp-row income-row"><div><div class="row-label">Sign-on bonus</div></div><div class="val"><input class="editable" id="b4" value="0" oninput="calc()"></div><div class="val"><input class="editable" id="c4" value="0" oninput="calc()"></div></div>
+    <div class="comp-row income-row"><div><div class="row-label">Student loan repayment</div><div class="row-note">CARES Act — pre-tax</div></div><div class="val"><input class="editable" id="b5" value="0" oninput="calc()"></div><div class="val"><input class="editable" id="c5" value="2000" oninput="calc()"></div></div>
+    <div class="comp-row income-row"><div><div class="row-label">Annual productivity bonus</div></div><div class="val"><input class="editable" id="b6" value="1000" oninput="calc()"></div><div class="val"><input class="editable" id="c6" value="2500" oninput="calc()"></div></div>
+
+    <div class="section-label benefits">&#x1F3E6; benefits (adds value)</div>
+    <div class="comp-row benefits-row">
+      <div><div class="row-label">Employer retirement match</div><div class="row-note">Job A: SIMPLE IRA &middot; Job B: 401K</div></div>
+      <div class="val pos"><input class="editable" id="b7pct" value="0" oninput="calc()" style="width:32px"><span class="unit">% =</span><span id="b7disp" style="color:var(--pos);font-size:12px;font-weight:600;margin-left:3px">$0</span></div>
+      <div class="val pos"><input class="editable" id="c7pct" value="6" oninput="calc()" style="width:24px;color:var(--accent)"><span class="unit">% =</span><span id="c7disp" style="color:var(--accent);font-size:12px;font-weight:600;margin-left:3px">&#x2014;</span></div>
+    </div>
+    <div class="calc-row"><div class="calc-label">&#x21B3; annual retirement contribution</div><div class="calc-val" id="b7ann">$0</div><div class="calc-val" id="c7ann">&#x2014;</div></div>
+    <div class="comp-row benefits-row"><div><div class="row-label">Continuing education</div></div><div class="val pos"><input class="editable" id="b8" value="1500" oninput="calc()"></div><div class="val pos"><input class="editable" id="c8" value="1500" oninput="calc()"></div></div>
+    <div class="comp-row benefits-row"><div><div class="row-label">Other perk</div></div><div class="val"><input class="editable" id="b9" value="0" oninput="calc()"></div><div class="val"><input class="editable" id="c9" value="0" oninput="calc()"></div></div>
+
+    <div class="section-label costs">&#x1F4B8; out-of-pocket costs (subtracts)</div>
+    <div class="comp-row costs-row"><div><div class="row-label">Health insurance premium</div><div class="row-note">enter monthly &rarr;</div></div><div class="val neg"><input class="editable" id="b10m" value="171" oninput="calc()"><span class="unit">/mo</span></div><div class="val neg"><input class="editable" id="c10m" value="84" oninput="calc()"><span class="unit">/mo</span></div></div>
+    <div class="calc-row"><div class="calc-label">&#x21B3; annual health insurance cost</div><div class="calc-val" id="b10ann">&#x2014;</div><div class="calc-val" id="c10ann">&#x2014;</div></div>
+    <div class="comp-row costs-row"><div><div class="row-label">Disability insurance</div><div class="row-note">enter monthly &rarr;</div></div><div class="val neg"><input class="editable" id="b11m" value="20" oninput="calc()"><span class="unit">/mo</span></div><div class="val neg"><input class="editable" id="c11m" value="10" oninput="calc()"><span class="unit">/mo</span></div></div>
+    <div class="calc-row"><div class="calc-label">&#x21B3; annual disability cost</div><div class="calc-val" id="b11ann">&#x2014;</div><div class="calc-val" id="c11ann">&#x2014;</div></div>
+    <div class="comp-row costs-row"><div><div class="row-label">Life insurance</div><div class="row-note">enter monthly &middot; $100K coverage &rarr;</div></div><div class="val neg"><input class="editable" id="b12m" value="10" oninput="calc()"><span class="unit">/mo</span></div><div class="val neg"><input class="editable" id="c12m" value="10" oninput="calc()"><span class="unit">/mo</span></div></div>
+    <div class="calc-row"><div class="calc-label">&#x21B3; annual life insurance cost</div><div class="calc-val" id="b12ann">&#x2014;</div><div class="calc-val" id="c12ann">&#x2014;</div></div>
+    <div class="comp-row-with-comment costs-row">
+      <div><div class="row-label">Other expense A</div><div class="row-note">annual</div></div>
+      <div class="val neg"><input class="editable" id="b13" value="0" oninput="calc()"></div>
+      <div class="val neg"><input class="editable" id="c13" value="0" oninput="calc()"></div>
+      <div class="comment-row"><input type="text" class="comment-input" id="note13" placeholder="Describe this expense&hellip;" style="height:28px"></div>
+    </div>
+    <div class="comp-row-with-comment costs-row" style="border-bottom:none">
+      <div><div class="row-label">Other expense B</div><div class="row-note">annual</div></div>
+      <div class="val neg"><input class="editable" id="b14" value="0" oninput="calc()"></div>
+      <div class="val neg"><input class="editable" id="c14" value="0" oninput="calc()"></div>
+      <div class="comment-row"><input type="text" class="comment-input" id="note14" placeholder="Describe this expense&hellip;" style="height:28px"></div>
+    </div>
+  </div>
+
+  <div class="total-bar">
+    <div class="total-row">
+      <div class="total-label">&#x1F4BC; Total compensation</div>
+      <div class="total-val t1" id="tot1">&#x2014;</div>
+      <div class="total-val t2" id="tot2">&#x2014;</div>
+    </div>
+    <div class="diff-row">
+      <div class="diff-label">difference vs Job A</div>
+      <div class="diff-val">&#x2014;</div>
+      <div class="diff-val hi" id="diff-val">&#x2014;</div>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-title">compensation breakdown</div>
+    <div id="bars"></div>
+    <div style="display:flex;gap:18px;margin-top:.7rem">
+      <span style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)"><span style="width:10px;height:4px;border-radius:2px;background:var(--muted);opacity:.55;display:inline-block"></span><span id="legend1">Job A</span></span>
+      <span style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)"><span style="width:10px;height:4px;border-radius:2px;background:var(--accent);display:inline-block"></span><span id="legend2">Job B</span></span>
+    </div>
+  </div>
+
+  <div class="qual-section">
+    <div class="qual-title">qualitative factors &#x2014; select the better offer</div>
+    <div class="qual-header">
+      <div></div>
+      <div class="qcol-head">better offer &#x25BE;</div>
+      <div class="qcol-head">notes</div>
+    </div>
+    <div id="qual-rows"></div>
+    <div class="qual-tally">
+      <div class="tally-label">qualitative score</div>
+      <div class="tally-scores">
+        <div class="tally-item"><div class="tally-num ta" id="tallyA">0</div><div class="tally-sub" id="tsubA">job a</div></div>
+        <div class="tally-item"><div class="tally-num tb" id="tallyB">0</div><div class="tally-sub" id="tsubB">job b</div></div>
+        <div class="tally-item"><div class="tally-num ts" id="tallyS">0</div><div class="tally-sub">same</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="export-row">
+    <button class="btn primary" onclick="exportCSV()">Export for Google Sheets &#x2197;</button>
+    <button class="btn" onclick="window.print()">Print / Save PDF &#x1F5A8;</button>
+  </div>
+
+  <p style="margin-top:1.5rem;font-size:11px;color:var(--muted);text-align:center;font-family:var(--mono)">newgradfinances.com &middot; plan today. build tomorrow.</p>
+</div>
+
+<script>
+const qualFactors=[
+  "Driving distance / commute",
+  "Mentorship & supervision quality",
+  "Schedule flexibility",
+  "Documentation built into workday?",
+  "Overtime pay if > 40 hrs/week?",
+  "PTO amount & cashout policy",
+  "Non-compete clause?",
+  "Productivity expectations (units/day)",
+  "Career advancement / raise potential",
+  "Potential for job satisfaction",
+  "Potential for learning",
+  "Fringe benefits (meals, parking, etc.)",
+  "Other"
+];
+const qc=document.getElementById('qual-rows');
+qualFactors.forEach((f,i)=>{
+  const row=document.createElement('div');
+  row.className='qual-row';
+  row.innerHTML=`
+    <div class="qual-label">${f}</div>
+    <div>
+      <select class="qual-select" id="qs${i}" onchange="styleSelect(${i});tally()">
+        <option value="">&#x2014; select &#x2014;</option>
+        <option value="A">Job A</option>
+        <option value="B">Job B</option>
+        <option value="S">Same</option>
+      </select>
+    </div>
+    <div><input type="text" class="qual-note" id="qn${i}" placeholder="${f==='Other'?'Describe…':'Notes…'}"></div>`;
+  qc.appendChild(row);
+});
+
+function styleSelect(i){
+  const s=document.getElementById('qs'+i);
+  s.className='qual-select';
+  if(s.value==='A')s.classList.add('selected-a');
+  else if(s.value==='B')s.classList.add('selected-b');
+  else if(s.value==='S')s.classList.add('selected-s');
+}
+function tally(){
+  let tA=0,tB=0,tS=0;
+  qualFactors.forEach((_,i)=>{
+    const v=document.getElementById('qs'+i).value;
+    if(v==='A')tA++;else if(v==='B')tB++;else if(v==='S')tS++;
+  });
+  document.getElementById('tallyA').textContent=tA;
+  document.getElementById('tallyB').textContent=tB;
+  document.getElementById('tallyS').textContent=tS;
+}
+function shortName(id){const val=document.getElementById(id).value||'';return val.split('—')[0].trim()||val.split('-')[0].trim()||val;}
+function updateColHeads(){
+  const a=shortName('jobname1'),b=shortName('jobname2');
+  ['head1','legend1'].forEach(id=>document.getElementById(id).textContent=a);
+  ['head2','legend2'].forEach(id=>document.getElementById(id).textContent=b);
+  document.getElementById('tsubA').textContent=a.toLowerCase();
+  document.getElementById('tsubB').textContent=b.toLowerCase();
+}
+function v(id){return parseFloat(document.getElementById(id).value.replace(/,/g,''))||0;}
+function fmt(n){return '$'+Math.round(n).toLocaleString();}
+function calc(){
+  const b3=v('b3'),c3=v('c3');
+  const b7v=b3*(v('b7pct')/100),c7v=c3*(v('c7pct')/100);
+  document.getElementById('b7disp').textContent=fmt(b7v);
+  document.getElementById('c7disp').textContent=fmt(c7v);
+  document.getElementById('b7ann').textContent=fmt(b7v);
+  document.getElementById('c7ann').textContent=fmt(c7v);
+  const b10a=v('b10m')*12,c10a=v('c10m')*12;
+  const b11a=v('b11m')*12,c11a=v('c11m')*12;
+  const b12a=v('b12m')*12,c12a=v('c12m')*12;
+  document.getElementById('b10ann').textContent=fmt(b10a);
+  document.getElementById('c10ann').textContent=fmt(c10a);
+  document.getElementById('b11ann').textContent=fmt(b11a);
+  document.getElementById('c11ann').textContent=fmt(c11a);
+  document.getElementById('b12ann').textContent=fmt(b12a);
+  document.getElementById('c12ann').textContent=fmt(c12a);
+  const inc1=b3+v('b4')+v('b5')+v('b6')+b7v+v('b8')+v('b9');
+  const inc2=c3+v('c4')+v('c5')+v('c6')+c7v+v('c8')+v('c9');
+  const exp1=b10a+b11a+b12a+v('b13')+v('b14');
+  const exp2=c10a+c11a+c12a+v('c13')+v('c14');
+  const tot1=inc1-exp1,tot2=inc2-exp2,diff=tot2-tot1;
+  document.getElementById('tot1').textContent=fmt(tot1);
+  document.getElementById('tot2').textContent=fmt(tot2);
+  document.getElementById('disp-total1').textContent=fmt(tot1);
+  document.getElementById('disp-total2').textContent=fmt(tot2);
+  document.getElementById('diff-val').textContent=(diff>=0?'+':'')+fmt(diff);
+  const c1=document.getElementById('card1'),c2=document.getElementById('card2');
+  const n1=document.getElementById('jobname1').value,n2=document.getElementById('jobname2').value;
+  if(tot1>=tot2){
+    c1.classList.add('winner');c2.classList.remove('winner');
+    document.getElementById('label1').innerHTML='<span class="winner-badge">current leader</span><br><input class="job-name-input" id="jobname1" value="'+n1+'" oninput="updateColHeads()">';
+    document.getElementById('label2').innerHTML='<input class="job-name-input" id="jobname2" value="'+n2+'" oninput="updateColHeads()">';
+  } else {
+    c2.classList.add('winner');c1.classList.remove('winner');
+    document.getElementById('label2').innerHTML='<span class="winner-badge">current leader</span><br><input class="job-name-input" id="jobname2" value="'+n2+'" oninput="updateColHeads()">';
+    document.getElementById('label1').innerHTML='<input class="job-name-input" id="jobname1" value="'+n1+'" oninput="updateColHeads()">';
+  }
+  renderBars(b3,v('b6'),v('b8'),b7v,exp1,c3,v('c6'),v('c8'),c7v,exp2);
+}
+function renderBars(b3,b6,b8,b7,exp1,c3,c6,c8,c7,exp2){
+  const cats=[{label:'Base salary',v1:b3,v2:c3},{label:'Bonus & CE',v1:b6+b8,v2:c6+c8},{label:'Retirement',v1:b7,v2:c7},{label:'Insurance costs',v1:exp1,v2:exp2}];
+  const mx=Math.max(...cats.map(c=>Math.max(c.v1,c.v2)));
+  const el=document.getElementById('bars');el.innerHTML='';
+  cats.forEach(cat=>{
+    const p1=mx>0?Math.round(cat.v1/mx*100):0,p2=mx>0?Math.round(cat.v2/mx*100):0;
+    el.innerHTML+='<div class="bar-row"><div class="bar-label">'+cat.label+'</div><div style="flex:1"><div class="bar-track" style="margin-bottom:4px"><div class="bar-fill b1" style="width:'+p1+'%"></div></div><div class="bar-track"><div class="bar-fill b2" style="width:'+p2+'%"></div></div></div><div class="bar-val">'+fmt(cat.v1)+'<br>'+fmt(cat.v2)+'</div></div>';
+  });
+}
+function gv(id){const el=document.getElementById(id);return el?el.value:'';}
+function exportCSV(){
+  const b3=v('b3'),c3=v('c3'),b7v=b3*(v('b7pct')/100),c7v=c3*(v('c7pct')/100);
+  const ja=gv('jobname1')||'Job A',jb=gv('jobname2')||'Job B';
+  const rows=[['Category','Item',ja,jb],
+    ['Income','Base Salary',v('b3'),v('c3')],
+    ['Income','Sign-on Bonus',v('b4'),v('c4')],
+    ['Income','Student Loan Repayment',v('b5'),v('c5')],
+    ['Income','Annual Productivity Bonus',v('b6'),v('c6')],
+    ['Benefits','Retirement Match %',v('b7pct')+'%',v('c7pct')+'%'],
+    ['Benefits','Retirement Contribution ($)',Math.round(b7v),Math.round(c7v)],
+    ['Benefits','Continuing Education',v('b8'),v('c8')],
+    ['Benefits','Other Perk',v('b9'),v('c9')],
+    ['Costs','Health Insurance (annual)',v('b10m')*12,v('c10m')*12],
+    ['Costs','Disability Insurance (annual)',v('b11m')*12,v('c11m')*12],
+    ['Costs','Life Insurance (annual)',v('b12m')*12,v('c12m')*12],
+    ['Costs','Other Expense A -- '+gv('note13'),v('b13'),v('c13')],
+    ['Costs','Other Expense B -- '+gv('note14'),v('b14'),v('c14')],
+    ['','TOTAL COMPENSATION',document.getElementById('tot1').textContent.replace(/[$,]/g,''),document.getElementById('tot2').textContent.replace(/[$,]/g,'')],
+    ['',''],
+    ['Qualitative','Factor','Better Offer','Notes']
+  ];
+  qualFactors.forEach((f,i)=>{
+    const sel=document.getElementById('qs'+i);
+    const label=sel.value==='A'?ja:sel.value==='B'?jb:sel.value==='S'?'Same':'';
+    rows.push([f,'',label,gv('qn'+i)]);
+  });
+  rows.push(['','Qualitative Score',
+    ja+': '+document.getElementById('tallyA').textContent,
+    jb+': '+document.getElementById('tallyB').textContent+'  |  Same: '+document.getElementById('tallyS').textContent
+  ]);
+  const csv=rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download='ngf_job_offer_comparison.csv';
+  a.click();
+}
+calc();updateColHeads();
+</script>
+</body>
+</html>
