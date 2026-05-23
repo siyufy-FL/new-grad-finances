@@ -6,7 +6,7 @@
   <title>New Grad Finances — Student Loan Calculator (2026 Guide)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=DM+Sans:wght@300;400;500;600;700&family=Carlito:wght@400;700&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg:           #F0EDE3;
@@ -53,108 +53,89 @@
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
     ::-webkit-scrollbar-thumb:hover { background: #b8b2a6; }
 
-    /* ===== NAV ===== */
-    nav {
+    /* ===== HEADER BAR ===== */
+    .header-bar {
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(255, 255, 255, 0.96);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border-bottom: 1px solid var(--border);
-    }
-    .nav-inner {
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 0 2rem;
-      height: 68px;
+      background: #0d111a;
+      padding: .9rem 1.5rem;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      gap: 16px;
     }
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.85rem;
-      text-decoration: none;
+    .logo-circle {
+      width: 52px; height: 52px; border-radius: 50%;
+      border: 2px solid rgba(13,148,136,.45);
+      background: #0d1520;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
     }
-    .nav-brand { display: flex; flex-direction: column; line-height: 1.1; }
-    .nav-brand-name {
-      font-family: 'Archivo', sans-serif;
-      font-weight: 900;
-      font-size: 1.15rem;
-      color: #111;
-      letter-spacing: 0.5px;
+    .brand-name {
+      font-family: 'Carlito','Calibri',sans-serif;
+      font-size: 17px; font-weight: 700;
+      letter-spacing: .08em; color: #fff;
+      text-transform: uppercase; line-height: 1.2;
     }
-    .nav-brand-sub {
-      font-family: 'Archivo', sans-serif;
-      font-weight: 700;
-      font-size: 0.72rem;
-      color: var(--green-dark);
-      letter-spacing: 3px;
+    .brand-name span { color: #4a9fd4; }
+    .brand-tagline {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px; letter-spacing: .18em;
+      text-transform: uppercase; color: rgba(255,255,255,.45);
+      margin-top: 3px;
     }
-    .nav-tagline {
-      font-size: 0.62rem;
-      color: var(--dim);
-      letter-spacing: 0.8px;
-      margin-top: 1px;
-    }
-    .nav-pill {
-      font-family: 'Archivo', sans-serif;
-      font-weight: 700;
-      font-size: 0.7rem;
-      letter-spacing: 1.5px;
-      color: #111;
-      background: var(--green);
-      border: 1px solid var(--green-dark);
-      border-radius: 4px;
-      padding: 0.3rem 0.8rem;
-      text-transform: uppercase;
+    .brand-tool {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px; letter-spacing: .13em;
+      text-transform: uppercase; color: #4a9fd4;
+      margin-top: 5px;
+      border-top: 1px solid rgba(74,159,212,.3);
+      padding-top: 4px;
     }
 
     /* ===== HERO ===== */
     .hero {
-      position: relative;
-      overflow: hidden;
-      padding: 5rem 2rem 4.5rem;
+      background: #0d111a;
+      padding: 2.75rem 1.5rem;
       text-align: center;
-      background: var(--bg);
-      border-bottom: 1px solid var(--border);
-    }
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: -80px; left: 50%; transform: translateX(-50%);
-      width: 700px; height: 500px;
-      background: radial-gradient(ellipse, rgba(45,219,128,0.07) 0%, transparent 70%);
-      pointer-events: none;
+      border-bottom: 1px solid rgba(255,255,255,.07);
     }
     .hero-eyebrow {
-      display: inline-block;
-      font-family: 'Archivo', sans-serif;
-      font-weight: 700;
-      font-size: 0.72rem;
-      letter-spacing: 3px;
-      color: var(--green-dark);
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+      background: rgba(13,148,136,.15);
+      border: 1px solid rgba(13,148,136,.38);
+      color: #5eead4;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: .13em;
       text-transform: uppercase;
-      padding: 0.28rem 0.9rem;
-      border: 1px solid rgba(45,219,128,0.4);
-      border-radius: 3px;
-      margin-bottom: 1.4rem;
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-bottom: 1rem;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #5eead4;
+      flex-shrink: 0;
     }
     .hero h1 {
-      font-family: 'Archivo', sans-serif;
-      font-weight: 900;
-      font-size: clamp(2rem, 5vw, 3.4rem);
-      line-height: 1.05;
-      color: #111;
-      max-width: 680px;
-      margin: 0 auto 1.2rem;
+      font-family: 'Carlito','Calibri',sans-serif;
+      font-weight: 700;
+      font-size: clamp(22px, 4vw, 34px);
+      line-height: 1.25;
+      color: #fff;
+      max-width: 620px;
+      margin: 0 auto .85rem;
+      letter-spacing: -.01em;
     }
     .hero p {
-      font-size: 1.05rem;
-      color: var(--muted);
-      max-width: 540px;
+      font-size: 14px;
+      color: rgba(255,255,255,.6);
+      max-width: 520px;
       margin: 0 auto;
       line-height: 1.75;
     }
@@ -306,7 +287,7 @@
       gap: 1.25rem;
       margin-bottom: 2.5rem;
     }
-    @media (max-width: 960px) { .options-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 640px) { .options-grid { grid-template-columns: 1fr; } }
 
     .option-card {
       background: var(--bg-card);
@@ -802,78 +783,32 @@
 </head>
 <body>
 
-<!-- ===== NAV ===== -->
-<nav>
-  <div class="nav-inner">
-    <a href="#" class="nav-logo">
-      <!-- Logo SVG recreation -->
-      <svg viewBox="0 0 200 228" xmlns="http://www.w3.org/2000/svg" width="52" height="59" aria-label="New Grad Finances logo">
-        <defs>
-          <clipPath id="circle-clip">
-            <circle cx="100" cy="86" r="80"/>
-          </clipPath>
-        </defs>
-        <rect width="200" height="228" fill="#050810"/>
-        <!-- Outer circle -->
-        <circle cx="100" cy="86" r="80" fill="#06101f"/>
-        <circle cx="100" cy="86" r="80" fill="none" stroke="#1e80d4" stroke-width="2.8"/>
-        <!-- Stars -->
-        <g clip-path="url(#circle-clip)">
-          <circle cx="62"  cy="46"  r="1.4" fill="#fff" opacity=".55"/>
-          <circle cx="150" cy="42"  r="1.1" fill="#fff" opacity=".45"/>
-          <circle cx="163" cy="66"  r="0.9" fill="#fff" opacity=".4"/>
-          <circle cx="44"  cy="68"  r="0.8" fill="#fff" opacity=".45"/>
-          <circle cx="124" cy="36"  r="0.9" fill="#fff" opacity=".4"/>
-          <circle cx="78"  cy="32"  r="0.7" fill="#fff" opacity=".4"/>
-          <circle cx="172" cy="90"  r="0.8" fill="#fff" opacity=".3"/>
-          <!-- Left mountain -->
-          <polygon points="16,168 62,94 100,132" fill="#07101e"/>
-          <!-- Right mountain -->
-          <polygon points="100,132 138,94 184,168" fill="#07101e"/>
-          <!-- Center peak (tallest) -->
-          <polygon points="52,168 100,52 148,168" fill="#050d1a"/>
-          <!-- Mountain shading -->
-          <polygon points="100,52 100,168 148,168" fill="#060f1c" opacity=".5"/>
-          <!-- Winding path -->
-          <path d="M100,52 C95,72 112,90 104,112 C98,130 113,146 100,168"
-                fill="none" stroke="#1e80d4" stroke-width="1.8" stroke-linecap="round" opacity=".9"/>
-          <!-- Flag pole -->
-          <line x1="100" y1="52" x2="100" y2="28" stroke="#c8d8ea" stroke-width="2" stroke-linecap="round"/>
-          <!-- Flag -->
-          <polygon points="100,28 126,38 100,48" fill="#1e80d4"/>
-        </g>
-        <!-- NEW GRAD text -->
-        <text x="100" y="187" text-anchor="middle" fill="#fff"
-              font-size="29" font-weight="900"
-              font-family="'Arial Black', 'Impact', sans-serif"
-              letter-spacing="-.5">NEW GRAD</text>
-        <!-- Thin separator line -->
-        <line x1="24" y1="192" x2="176" y2="192" stroke="#1e80d4" stroke-width=".7" opacity=".4"/>
-        <!-- FINANCES text -->
-        <text x="100" y="209" text-anchor="middle" fill="#1e80d4"
-              font-size="12.5" font-weight="700"
-              font-family="Arial, sans-serif" letter-spacing="3.5">&#8212;FINANCES&#8212;</text>
-        <!-- Tagline -->
-        <text x="100" y="223" text-anchor="middle" fill="#3a5068"
-              font-size="6" font-family="Arial, sans-serif" letter-spacing=".9">
-          PLAN TODAY. BUILD TOMORROW.
-        </text>
-      </svg>
-      <div class="nav-brand">
-        <span class="nav-brand-name">NEW GRAD</span>
-        <span class="nav-brand-sub">FINANCES</span>
-        <span class="nav-tagline">PLAN TODAY. BUILD TOMORROW.</span>
-      </div>
-    </a>
-    <span class="nav-pill">Student Loan Strategy</span>
+<!-- ===== HEADER BAR ===== -->
+<div class="header-bar">
+  <div class="logo-circle">
+    <svg viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" width="34" height="34">
+      <circle cx="19" cy="14" r="10" stroke="#0d9488" stroke-width="1.5" fill="none"/>
+      <path d="M11 14 L19 6 L27 14" stroke="#4db8c8" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <path d="M16 14 L19 10 L22 14" stroke="#4db8c8" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      <path d="M19 10 L19 24" stroke="#4db8c8" stroke-width="1" stroke-dasharray="2 2"/>
+      <rect x="17.5" y="4.5" width="3" height="2.5" rx=".4" fill="#0d9488"/>
+      <line x1="8" y1="24" x2="30" y2="24" stroke="#0d9488" stroke-width="1.2"/>
+      <line x1="6" y1="24" x2="8" y2="24" stroke="#0d9488" stroke-width="2" stroke-linecap="round"/>
+      <line x1="30" y1="24" x2="32" y2="24" stroke="#0d9488" stroke-width="2" stroke-linecap="round"/>
+    </svg>
   </div>
-</nav>
+  <div>
+    <div class="brand-name">New Grad <span>Finances</span></div>
+    <div class="brand-tagline">Plan Today. Build Tomorrow.</div>
+    <div class="brand-tool">Student Loan Repayment Calculator</div>
+  </div>
+</div>
 
 <!-- ===== HERO ===== -->
 <section class="hero">
-  <span class="hero-eyebrow">Student Loan Strategy</span>
+  <div class="hero-eyebrow">Student Loan Repayment Calculator</div>
   <h1>Three Ways to Pay Off Your Student Loans</h1>
-  <p>Compare PSLF, Repayment Assistance Plan — RAP (30 years), and Standard Aggressive Repayment (10 years) side by side. Plug in your numbers below.</p>
+  <p>Compare PSLF, Repayment Assistance Plan (RAP), and Standard Aggressive Repayment side by side. Enter your numbers below.</p>
 </section>
 
 <!-- ===== MAIN ===== -->
