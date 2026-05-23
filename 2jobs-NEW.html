@@ -20,13 +20,13 @@
 }
 body{font-family:var(--sans);background:var(--bg);color:var(--stone);padding:0 0 3rem;min-height:100vh}
 .shell{max-width:720px;margin:0 auto;padding:0 1rem}
-.header-bar{background:var(--navy);padding:.9rem 1.5rem;display:flex;align-items:center;gap:14px;margin-bottom:1.5rem}
+.header-bar{background:#0d111a;padding:.9rem 1.5rem;display:flex;align-items:center;gap:16px;margin-bottom:1.5rem}
 .logo-circle{width:52px;height:52px;border-radius:50%;border:2px solid rgba(13,148,136,0.5);flex-shrink:0;background:#0d1520;display:flex;align-items:center;justify-content:center}
 .brand-text{flex:1}
-.brand-name{font-size:16px;font-weight:700;letter-spacing:.05em;color:#fff;line-height:1.15;text-transform:uppercase}
-.brand-name span{color:var(--accent)}
-.brand-tagline{font-family:var(--mono);font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.38);margin-top:2px}
-.brand-tool{font-family:var(--mono);font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--accent);margin-top:5px;border-top:1px solid rgba(13,148,136,.3);padding-top:4px}
+.brand-name{font-size:17px;font-weight:700;letter-spacing:.08em;color:#ffffff;line-height:1.2;text-transform:uppercase}
+.brand-name span{color:#4a9fd4}
+.brand-tagline{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-top:3px}
+.brand-tool{font-family:var(--mono);font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:#4a9fd4;margin-top:5px;border-top:1px solid rgba(74,159,212,.3);padding-top:4px}
 .legend{display:flex;gap:16px;margin-bottom:1.2rem;flex-wrap:wrap}
 .legend-item{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)}
 .legend-swatch{width:28px;height:14px;border-radius:4px;flex-shrink:0}
@@ -170,7 +170,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--stone);padding:0 0
 
     <div class="section-label income">&#x1F4B0; income</div>
     <div class="comp-row income-row"><div><div class="row-label">Base salary</div></div><div class="val"><input class="editable" id="b3" value="72000" oninput="calc()"></div><div class="val accent"><input class="editable" id="c3" value="64000" oninput="calc()"></div></div>
-    <div class="comp-row income-row"><div><div class="row-label">Sign-on bonus</div></div><div class="val"><input class="editable" id="b4" value="0" oninput="calc()"></div><div class="val"><input class="editable" id="c4" value="0" oninput="calc()"></div></div>
+    <div class="comp-row income-row"><div><div class="row-label">Sign-on bonus <span style="color:var(--amber);font-size:11px">* see note below</span></div></div><div class="val"><input class="editable" id="b4" value="0" oninput="calc()"></div><div class="val"><input class="editable" id="c4" value="0" oninput="calc()"></div></div>
     <div class="comp-row income-row"><div><div class="row-label">Student loan repayment</div><div class="row-note">CARES Act — pre-tax</div></div><div class="val"><input class="editable" id="b5" value="0" oninput="calc()"></div><div class="val"><input class="editable" id="c5" value="2000" oninput="calc()"></div></div>
     <div class="comp-row income-row"><div><div class="row-label">Annual productivity bonus</div></div><div class="val"><input class="editable" id="b6" value="1000" oninput="calc()"></div><div class="val"><input class="editable" id="c6" value="2500" oninput="calc()"></div></div>
 
@@ -182,6 +182,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--stone);padding:0 0
     </div>
     <div class="calc-row"><div class="calc-label">&#x21B3; annual retirement contribution</div><div class="calc-val" id="b7ann">$0</div><div class="calc-val" id="c7ann">&#x2014;</div></div>
     <div class="comp-row benefits-row"><div><div class="row-label">Continuing education</div></div><div class="val pos"><input class="editable" id="b8" value="1500" oninput="calc()"></div><div class="val pos"><input class="editable" id="c8" value="1500" oninput="calc()"></div></div>
+    <div class="comp-row benefits-row"><div><div class="row-label">Mileage reimbursement</div><div class="row-note">Home health / travel (annual est.)</div></div><div class="val pos"><input class="editable" id="b_mile" value="0" oninput="calc()"></div><div class="val pos"><input class="editable" id="c_mile" value="0" oninput="calc()"></div></div>
     <div class="comp-row benefits-row"><div><div class="row-label">Other perk</div></div><div class="val"><input class="editable" id="b9" value="0" oninput="calc()"></div><div class="val"><input class="editable" id="c9" value="0" oninput="calc()"></div></div>
 
     <div class="section-label costs">&#x1F4B8; out-of-pocket costs (subtracts)</div>
@@ -197,12 +198,18 @@ body{font-family:var(--sans);background:var(--bg);color:var(--stone);padding:0 0
       <div class="val neg"><input class="editable" id="c13" value="0" oninput="calc()"></div>
       <div class="comment-row"><input type="text" class="comment-input" id="note13" placeholder="Describe this expense&hellip;" style="height:28px"></div>
     </div>
-    <div class="comp-row-with-comment costs-row" style="border-bottom:none">
+    <div class="comp-row-with-comment costs-row">
       <div><div class="row-label">Other expense B</div><div class="row-note">annual</div></div>
       <div class="val neg"><input class="editable" id="b14" value="0" oninput="calc()"></div>
       <div class="val neg"><input class="editable" id="c14" value="0" oninput="calc()"></div>
       <div class="comment-row"><input type="text" class="comment-input" id="note14" placeholder="Describe this expense&hellip;" style="height:28px"></div>
     </div>
+    <div class="comp-row costs-row">
+      <div><div class="row-label">Est. state/local tax rate</div><div class="row-note">Higher rate = higher cost. Enter % for each job location.</div></div>
+      <div class="val neg"><input class="editable" id="b_tax" value="0" oninput="calc()" style="width:40px"><span class="unit">%</span></div>
+      <div class="val neg"><input class="editable" id="c_tax" value="0" oninput="calc()" style="width:40px"><span class="unit">%</span></div>
+    </div>
+    <div class="calc-row"><div class="calc-label">&#x21B3; estimated tax impact on base salary</div><div class="calc-val" id="b_taxann">&mdash;</div><div class="calc-val" id="c_taxann">&mdash;</div></div>
   </div>
 
   <div class="total-bar">
@@ -252,10 +259,14 @@ body{font-family:var(--sans);background:var(--bg);color:var(--stone);padding:0 0
 
   <p style="margin-top:1.5rem;font-size:11px;color:var(--muted);text-align:center;font-family:var(--mono)">newgradfinances.com &middot; plan today. build tomorrow.</p>
 
-  <div style="margin-top:1.5rem;padding:1rem 1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:12px;font-size:11px;color:var(--muted);line-height:1.7;font-family:var(--sans)">
-    <strong style="color:var(--stone);font-size:12px">&#x26A0;&#xFE0F; Disclaimer</strong><br>
-    This tool is for <strong>educational and estimation purposes only</strong> and does not constitute financial, legal, or professional advice. All calculations are estimates based on the values you enter and may not reflect your actual compensation, tax liability, or benefits. Individual results will vary. Consult a licensed financial advisor or HR professional before making employment decisions.<br><br>
-    Questions? Contact <a href="mailto:asiyufy@south.edu" style="color:var(--accent);text-decoration:none;font-weight:700">asiyufy@south.edu</a>
+  <div style="margin-top:1.5rem;padding:1rem 1.25rem;background:#fef9ee;border:1px solid #f59e0b44;border-radius:12px;font-size:12px;color:var(--stone);line-height:1.7;font-family:var(--sans)">
+    <strong style="color:#d97706;font-size:13px">&#x1F4CB; Note on Sign-On Bonuses</strong><br>
+    For sign-on bonuses, make sure to consider there may be clauses requiring multi-year commitments — an early exit might require that funds be paid back. Always read the fine print before accepting.
+  </div>
+
+  <div style="margin-top:1.5rem;padding:1.1rem 1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:10px;font-size:0.76rem;color:var(--muted);line-height:1.7;font-family:var(--sans)">
+    <strong style="color:var(--stone)">Estimates only.</strong> PSLF requires 120 qualifying monthly payments under a qualifying repayment plan while working full-time for a qualifying employer — forgiven balance is tax-free. RAP (Repayment Assistance Plan) payments are based on AGI bracket percentages and include the two government subsidies enacted in P.L. 119-21 (effective July 2026): unpaid monthly interest is waived (balance never grows due to underpayment), and a $50 minimum principal reduction is guaranteed each month a full payment is made. Forgiveness after 30 years may be taxable as ordinary income under current law. Standard Aggressive uses fixed 10-year amortization — no income adjustments. PSLF and RAP totals assume a 3% annual salary increase, causing payments to grow each year; Standard Repayment payments are fixed. This tool does not account for refinancing, loan consolidation, or tax liability on forgiven amounts. Always consult a certified student loan advisor or financial planner for personalized guidance.<br><br>
+    Reference: <a href="https://studentaid.gov/manage-loans/repayment/plans" target="_blank" rel="noopener noreferrer" style="color:var(--accent);text-decoration:none">studentaid.gov &#x2014; Federal Repayment Plans</a>
   </div>
 </div>
 
@@ -264,16 +275,20 @@ const qualFactors=[
   "Driving distance / commute",
   "Mentorship & supervision quality",
   "Schedule flexibility",
-  "Documentation built into workday?",
+  "Documentation built into workday",
   "Overtime pay if > 40 hrs/week?",
-  "PTO amount & cashout policy",
+  "Better Vacation / PTO",
   "Non-compete clause?",
   "Productivity expectations (units/day)",
+  "Better caseload — volume",
+  "Better caseload — preferred patient population",
+  "Less required supervision of support staff (techs, aides, etc.)",
   "Career advancement / raise potential",
   "Potential for job satisfaction",
   "Potential for learning",
   "Fringe benefits (meals, parking, etc.)",
-  "Other"
+  "Other (1)",
+  "Other (2)"
 ];
 const qc=document.getElementById('qual-rows');
 qualFactors.forEach((f,i)=>{
@@ -336,10 +351,15 @@ function calc(){
   document.getElementById('c11ann').textContent=fmt(c11a);
   document.getElementById('b12ann').textContent=fmt(b12a);
   document.getElementById('c12ann').textContent=fmt(c12a);
-  const inc1=b3+v('b4')+v('b5')+v('b6')+b7v+v('b8')+v('b9');
-  const inc2=c3+v('c4')+v('c5')+v('c6')+c7v+v('c8')+v('c9');
-  const exp1=b10a+b11a+b12a+v('b13')+v('b14');
-  const exp2=c10a+c11a+c12a+v('c13')+v('c14');
+  const b_mile=v('b_mile'),c_mile=v('c_mile');
+  const b_taxrate=v('b_tax')/100,c_taxrate=v('c_tax')/100;
+  const b_taxamt=b3*b_taxrate,c_taxamt=c3*c_taxrate;
+  document.getElementById('b_taxann').textContent='-'+fmt(b_taxamt);
+  document.getElementById('c_taxann').textContent='-'+fmt(c_taxamt);
+  const inc1=b3+v('b4')+v('b5')+v('b6')+b7v+v('b8')+b_mile+v('b9');
+  const inc2=c3+v('c4')+v('c5')+v('c6')+c7v+v('c8')+c_mile+v('c9');
+  const exp1=b10a+b11a+b12a+v('b13')+v('b14')+b_taxamt;
+  const exp2=c10a+c11a+c12a+v('c13')+v('c14')+c_taxamt;
   const tot1=inc1-exp1,tot2=inc2-exp2,diff=tot2-tot1;
   document.getElementById('tot1').textContent=fmt(tot1);
   document.getElementById('tot2').textContent=fmt(tot2);
