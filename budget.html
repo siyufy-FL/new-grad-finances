@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New Grad Budget Planner · New Grad Finances</title>
+<link href="https://fonts.googleapis.com/css2?family=Carlito:wght@400;700&family=DM+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --accent:#0d9488;--green:#22c55e;--green-glow:rgba(34,197,94,0.22);
+  --bg:#eaede8;--surface:#f6f5f1;--stone:#292524;--muted:#78716c;--border:#d3d0c9;
+  --red:#dc2626;--pos:#0d9488;--amber:#d97706;
+  --green-bg:#edfaf4;--green-row-border:#a7f3d0;
+  --red-bg:#fef2f2;--red-row-border:#fecaca;
+  --car-bg:#f0fdfa;--car-row-border:#99f6e4;
+  --amber-bg:#fefce8;--amber-row-border:#fde68a;
+  --purple-bg:#faf5ff;--purple-row-border:#e9d5ff;
+  --navy:#1c2b3a;
+  --input-bg:#dbeafe;--input-border:#3b82f6;--input-text:#1e3a8a;
+  --calc-bg:#f3f4f6;--calc-text:#6b7280;
+  --mono:"DM Mono",monospace;--sans:"Carlito","Calibri",sans-serif;
+}
+body{font-family:var(--sans);background:var(--bg);color:var(--stone);padding:0 0 3rem;min-height:100vh}
+.shell{max-width:720px;margin:0 auto;padding:0 1rem}
+
+/* ── HEADER ── */
+.header-bar{position:sticky;top:0;z-index:200;background:#0d111a;padding:.9rem 1.5rem;display:flex;align-items:center;gap:16px;margin-bottom:1.5rem}
+.logo-circle{width:52px;height:52px;border-radius:50%;border:2px solid rgba(13,148,136,0.5);flex-shrink:0;background:#0d1520;display:flex;align-items:center;justify-content:center}
+.brand-text{flex:1}
+.brand-name{font-size:17px;font-weight:700;letter-spacing:.08em;color:#ffffff;line-height:1.2;text-transform:uppercase}
+.brand-name span{color:#4a9fd4}
+.brand-tagline{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-top:3px}
+.brand-tool{font-family:var(--mono);font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:#4a9fd4;margin-top:5px;border-top:1px solid rgba(74,159,212,.3);padding-top:4px}
+
+/* ── LEGEND ── */
+.legend{display:flex;gap:16px;margin-bottom:1.2rem;flex-wrap:wrap}
+.legend-item{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)}
+.legend-swatch{width:28px;height:14px;border-radius:4px;flex-shrink:0}
+
+/* ── STICKY SUMMARY ── */
+.sticky-summary{position:sticky;top:82px;z-index:100;background:var(--bg);padding:.6rem 0 .4rem;margin-bottom:8px;border-bottom:1px solid var(--border)}
+.summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.sum-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:.8rem 1rem}
+.sum-card.positive{border-color:var(--green);box-shadow:0 0 0 3px var(--green-glow)}
+.sum-card.negative{border-color:var(--red);box-shadow:0 0 0 3px rgba(220,38,38,.12)}
+.sum-label{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.3rem;font-family:var(--mono)}
+.sum-val{font-family:var(--mono);font-size:24px;font-weight:600;letter-spacing:-.02em;line-height:1;color:var(--stone)}
+.sum-val.pos{color:var(--pos)}
+.sum-val.neg{color:var(--red)}
+.sum-sub{font-size:10px;color:var(--muted);margin-top:.2rem}
+
+/* ── DATA CARD ── */
+.data-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:12px}
+.col-heads{display:grid;grid-template-columns:2fr 1fr 1fr;padding:.3rem 1.25rem}
+.col-head{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-align:right}
+.section-label{font-family:var(--mono);font-size:13px;letter-spacing:.16em;text-transform:uppercase;padding:.45rem 1.25rem .3rem;font-weight:600}
+.section-label.income{background:var(--green-bg);color:#166534;border-top:1px solid var(--green-row-border);border-bottom:1px solid var(--green-row-border)}
+.section-label.taxes{background:var(--red-bg);color:#991b1b;border-top:1px solid var(--red-row-border);border-bottom:1px solid var(--red-row-border)}
+.section-label.deductions{background:var(--red-bg);color:#991b1b;border-top:1px solid var(--red-row-border);border-bottom:1px solid var(--red-row-border)}
+.section-label.car{background:var(--amber-bg);color:#92400e;border-top:1px solid var(--amber-row-border);border-bottom:1px solid var(--amber-row-border)}
+.section-label.housing{background:var(--amber-bg);color:#92400e;border-top:1px solid var(--amber-row-border);border-bottom:1px solid var(--amber-row-border)}
+.section-label.other{background:var(--amber-bg);color:#92400e;border-top:1px solid var(--amber-row-border);border-bottom:1px solid var(--amber-row-border)}
+
+/* ── ROWS ── */
+.comp-row{display:grid;grid-template-columns:2fr 1fr 1fr;align-items:center;padding:.42rem 1.25rem;border-bottom:1px solid var(--border)}
+.comp-row.income-row{background:var(--green-bg)}
+.comp-row.taxes-row{background:var(--red-bg)}
+.comp-row.deductions-row{background:var(--red-bg)}
+.comp-row.car-row{background:var(--amber-bg)}
+.comp-row.housing-row{background:var(--amber-bg)}
+.comp-row.other-row{background:var(--amber-bg)}
+.calc-row{display:grid;grid-template-columns:2fr 1fr 1fr;align-items:center;padding:.32rem 1.25rem;border-bottom:1px solid var(--border);background:var(--calc-bg)}
+.calc-label{font-size:11px;color:var(--calc-text);font-style:italic}
+.calc-val{font-family:var(--mono);font-size:12px;color:var(--calc-text);text-align:right}
+.row-label{font-size:13px;color:var(--stone)}
+.row-note{font-size:11px;color:var(--muted);margin-top:1px}
+.val{font-family:var(--mono);font-size:13px;font-weight:600;text-align:right;color:var(--stone);display:flex;align-items:center;justify-content:flex-end;gap:2px}
+.val.pos{color:var(--pos)}
+.val.neg{color:var(--red)}
+.unit{font-size:10px;color:var(--muted);white-space:nowrap;font-weight:400}
+
+/* ── INPUTS ── */
+.editable{font-family:var(--mono);font-size:13px;font-weight:700;border:2px solid var(--input-border);background:var(--input-bg);color:var(--input-text);text-align:right;border-radius:6px;padding:3px 6px;width:100%;outline:none;cursor:text;min-width:0;box-shadow:0 0 0 3px rgba(59,130,246,0.15),inset 0 1px 2px rgba(30,58,138,0.08)}
+.editable:focus{border-color:#1d4ed8;background:#eff6ff;box-shadow:0 0 0 4px rgba(29,78,216,0.22),inset 0 1px 2px rgba(30,58,138,0.06)}
+.editable.pct{width:44px}
+
+/* ── TOTAL BARS ── */
+.total-bar{background:var(--navy);border-radius:14px;padding:1.2rem 1.5rem;margin:12px 0}
+.total-row{display:grid;grid-template-columns:2fr 1fr 1fr;align-items:baseline}
+.total-label{font-size:17px;font-weight:700;color:#fff}
+.total-val{font-family:var(--mono);font-size:24px;font-weight:600;text-align:right;letter-spacing:-.02em}
+.total-val.dim{color:rgba(255,255,255,.5)}
+.total-val.bright{color:var(--accent)}
+.total-val.surplus-pos{color:#4ade80}
+.total-val.surplus-neg{color:#f87171}
+.sub-row{display:grid;grid-template-columns:2fr 1fr 1fr;margin-top:.5rem;padding-top:.5rem;border-top:1px solid rgba(255,255,255,.1)}
+.sub-label{font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.4)}
+.sub-val{font-family:var(--mono);font-size:11px;font-weight:600;text-align:right;color:rgba(255,255,255,.4)}
+
+/* ── CHART ── */
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.1rem 1.25rem;margin-bottom:12px}
+.chart-title{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.9rem}
+.pie-wrap{display:flex;align-items:center;gap:2rem;flex-wrap:wrap}
+.pie-wrap svg{flex-shrink:0}
+.pie-legend{display:grid;grid-template-columns:1fr 1fr;gap:.35rem .8rem;flex:1;min-width:180px}
+.pie-legend-item{display:flex;align-items:center;gap:.4rem;font-size:11px;line-height:1.3}
+.pie-swatch{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.pie-legend-label{flex:1;color:var(--stone)}
+.pie-legend-pct{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap}
+@media(max-width:520px){.pie-wrap{flex-direction:column;align-items:center}}
+
+/* ── PRE-TAX BADGE ── */
+.pretax-badge{font-family:var(--mono);font-size:9px;letter-spacing:.06em;background:#edfaf4;border:1px solid #a7f3d0;color:#166534;border-radius:4px;padding:1px 6px;margin-left:5px;white-space:nowrap}
+.agi-row{display:grid;grid-template-columns:2fr 1fr 1fr;align-items:center;padding:.38rem 1.25rem;border-bottom:1px solid var(--border);background:#f0fdf4}
+.agi-label{font-size:11px;color:#166534;font-style:italic}
+.agi-val{font-family:var(--mono);font-size:12px;font-weight:700;color:#166534;text-align:right}
+
+/* ── SURPLUS GOALS ── */
+.surplus-goal-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.1rem 1.25rem;margin-bottom:12px}
+.surplus-goal-label{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.55rem}
+.surplus-goal-q{font-size:14px;font-weight:700;color:var(--stone);margin-bottom:.85rem;line-height:1.45}
+.goal-chips{display:flex;gap:.5rem;flex-wrap:wrap}
+.goal-chip{font-size:12px;font-weight:700;padding:7px 16px;border-radius:999px;border:1.5px solid var(--border);background:var(--bg);color:var(--muted);cursor:pointer;transition:background .15s,border-color .15s,color .15s;user-select:none}
+.goal-chip:hover{border-color:var(--accent);color:var(--accent)}
+.goal-chip.active{background:var(--accent);border-color:var(--accent);color:#fff}
+
+/* ── EXPORT ── */
+.export-row{display:flex;gap:8px;margin-top:.5rem;flex-wrap:wrap}
+.btn{font-family:var(--sans);font-size:13px;font-weight:700;padding:8px 18px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--stone);cursor:pointer;transition:background .15s}
+.btn:hover{background:var(--border)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover{opacity:.88}
+
+@media(max-width:520px){
+  .summary-grid{grid-template-columns:1fr 1fr;gap:8px}
+  .summary-grid .sum-card:last-child{grid-column:1/-1}
+  .col-heads,.comp-row,.calc-row,.total-row,.sub-row{grid-template-columns:1.4fr 1fr 1fr}
+  .sum-val{font-size:18px}
+  .total-val{font-size:18px}
+}
+</style>
+</head>
+<body>
+
+<!-- Sticky Header -->
+<div class="header-bar">
+  <div class="logo-circle">
+    <svg viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" width="38" height="38">
+      <circle cx="19" cy="14" r="10" stroke="#0d9488" stroke-width="1.5" fill="none"/>
+      <path d="M11 14 L19 6 L27 14" stroke="#4db8c8" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <path d="M16 14 L19 10 L22 14" stroke="#4db8c8" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      <path d="M19 10 L19 24" stroke="#4db8c8" stroke-width="1" stroke-dasharray="2 2"/>
+      <rect x="17.5" y="4.5" width="3" height="2.5" rx="0.4" fill="#0d9488"/>
+      <line x1="8" y1="24" x2="30" y2="24" stroke="#0d9488" stroke-width="1.2"/>
+      <line x1="6" y1="24" x2="8" y2="24" stroke="#0d9488" stroke-width="2" stroke-linecap="round"/>
+      <line x1="30" y1="24" x2="32" y2="24" stroke="#0d9488" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <div class="brand-text">
+    <div class="brand-name">New Grad <span>Finances</span></div>
+    <div class="brand-tagline">Plan Today. Build Tomorrow.</div>
+    <div class="brand-tool">New Grad Budget Planner</div>
+  </div>
+</div>
+
+<div class="shell">
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-swatch" style="background:#dbeafe;border:2px solid #3b82f6;box-shadow:0 0 0 2px rgba(59,130,246,0.2)"></div>Blue = enter your data</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#f3f4f6;border:1px solid #d3d0c9"></div>Gray = auto-calculated</div>
+  </div>
+
+  <!-- Sticky summary cards -->
+  <div class="sticky-summary">
+    <div class="summary-grid">
+      <div class="sum-card">
+        <div class="sum-label">Gross Income</div>
+        <div class="sum-val" id="s-gross">—</div>
+        <div class="sum-sub">annual</div>
+      </div>
+      <div class="sum-card">
+        <div class="sum-label">Est. Take-Home</div>
+        <div class="sum-val bright" id="s-takehome">—</div>
+        <div class="sum-sub">after taxes &amp; deductions</div>
+      </div>
+      <div class="sum-card" id="s-surplus-card">
+        <div class="sum-label">Monthly Surplus</div>
+        <div class="sum-val" id="s-surplus">—</div>
+        <div class="sum-sub" id="s-surplus-sub">after all expenses</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main data card -->
+  <div class="data-card">
+    <div class="col-heads">
+      <div></div>
+      <div class="col-head">/ month</div>
+      <div class="col-head">/ year</div>
+    </div>
+
+    <!-- ── INCOME ── -->
+    <div class="section-label income">&#x1F4B0; Income</div>
+    <div class="comp-row income-row">
+      <div><div class="row-label">Base salary</div><div class="row-note">enter annual gross</div></div>
+      <div class="val pos"><span id="salary-mo" style="color:var(--calc-text);font-size:12px">—</span></div>
+      <div class="val pos"><input class="editable" id="salary" value="71000" oninput="calc()"></div>
+    </div>
+    <div class="comp-row income-row">
+      <div><div class="row-label">PRN / side income</div><div class="row-note">enter annual amount</div></div>
+      <div class="val pos"><span id="prn-mo" style="color:var(--calc-text);font-size:12px">—</span></div>
+      <div class="val pos"><input class="editable" id="prn" value="6000" oninput="calc()"></div>
+    </div>
+    <div class="comp-row income-row">
+      <div><div class="row-label">Sign-on bonus</div><div class="row-note">one-time, enter annual</div></div>
+      <div class="val pos">—</div>
+      <div class="val pos"><input class="editable" id="signon" value="0" oninput="calc()"></div>
+    </div>
+
+    <!-- ── TAXES (auto-calculated) ── -->
+    <div class="section-label taxes">&#x1F9FE; Estimated Taxes</div>
+    <div class="agi-row">
+      <div class="agi-label">&#x21B3; est. adjusted gross income (gross &minus; 401k / HSA / FSA)</div>
+      <div class="agi-val" id="agi-mo">—</div>
+      <div class="agi-val" id="agi-yr">—</div>
+    </div>
+    <div class="comp-row taxes-row">
+      <div><div class="row-label">Federal income tax <span style="font-family:var(--mono);font-size:9px;letter-spacing:.08em;background:#fef9ee;border:1px solid #f59e0b55;color:#b45309;border-radius:4px;padding:1px 6px;margin-left:4px">Single filer only</span></div><div class="row-note">2026 brackets · $16,100 std. deduction · applied to AGI</div></div>
+      <div class="val neg"><span id="fed-mo">—</span></div>
+      <div class="val neg"><span id="fed-yr">—</span></div>
+    </div>
+    <div class="comp-row taxes-row">
+      <div><div class="row-label">FICA (Social Security)</div><div class="row-note">6.2% on wages up to $176,100</div></div>
+      <div class="val neg"><span id="fica-mo">—</span></div>
+      <div class="val neg"><span id="fica-yr">—</span></div>
+    </div>
+    <div class="comp-row taxes-row">
+      <div><div class="row-label">Medicare</div><div class="row-note">1.45% of all wages</div></div>
+      <div class="val neg"><span id="med-mo">—</span></div>
+      <div class="val neg"><span id="med-yr">—</span></div>
+    </div>
+    <div class="comp-row taxes-row">
+      <div><div class="row-label">State income tax</div><div class="row-note">enter your state rate · applied to AGI</div></div>
+      <div class="val neg"><span id="state-mo">—</span></div>
+      <div class="val neg" style="display:flex;align-items:center;justify-content:flex-end;gap:4px">
+        <input class="editable pct" id="state-pct" value="6.5" oninput="calc()"><span class="unit">%</span>
+      </div>
+    </div>
+    <div class="comp-row taxes-row">
+      <div><div class="row-label">Local / city tax</div><div class="row-note">enter rate if applicable</div></div>
+      <div class="val neg"><span id="local-mo">—</span></div>
+      <div class="val neg" style="display:flex;align-items:center;justify-content:flex-end;gap:4px">
+        <input class="editable pct" id="local-pct" value="0" oninput="calc()"><span class="unit">%</span>
+      </div>
+    </div>
+    <div class="calc-row">
+      <div class="calc-label">&#x21B3; total estimated taxes</div>
+      <div class="calc-val" id="tax-total-mo">—</div>
+      <div class="calc-val" id="tax-total-yr">—</div>
+    </div>
+
+    <!-- ── DEDUCTIONS ── -->
+    <div class="section-label deductions">&#x1F4C9; Payroll Deductions</div>
+    <div class="comp-row deductions-row">
+      <div><div class="row-label">Health insurance premium</div><div class="row-note">your share only</div></div>
+      <div class="val neg"><input class="editable" id="health-mo" value="178" oninput="calc()"><span class="unit">/mo</span></div>
+      <div class="val neg"><span id="health-yr">—</span></div>
+    </div>
+    <div class="comp-row deductions-row">
+      <div><div class="row-label">Retirement contribution (401k / 403b)<span class="pretax-badge">&#x2193; reduces AGI</span></div><div class="row-note">your % of base salary</div></div>
+      <div class="val neg"><span id="ret-mo">—</span></div>
+      <div class="val neg" style="display:flex;align-items:center;justify-content:flex-end;gap:4px">
+        <input class="editable pct" id="ret-pct" value="3" oninput="calc()"><span class="unit">%</span>
+      </div>
+    </div>
+    <div class="calc-row">
+      <div class="calc-label">&#x21B3; retirement annual amount</div>
+      <div class="calc-val" id="ret-yr-calc">—</div>
+      <div class="calc-val" id="ret-yr">—</div>
+    </div>
+    <div class="comp-row deductions-row">
+      <div><div class="row-label">HSA contribution<span class="pretax-badge">&#x2193; reduces AGI</span></div><div class="row-note">enter annual · 2026 limit: $4,300 individual / $8,550 family</div></div>
+      <div class="val neg"><span id="hsa-mo">—</span></div>
+      <div class="val neg"><input class="editable" id="hsa-yr" value="0" oninput="calc()"></div>
+    </div>
+    <div class="comp-row deductions-row">
+      <div><div class="row-label">FSA contribution<span class="pretax-badge">&#x2193; reduces AGI</span></div><div class="row-note">enter annual · 2026 limit: $3,300</div></div>
+      <div class="val neg"><span id="fsa-mo">—</span></div>
+      <div class="val neg"><input class="editable" id="fsa-yr" value="0" oninput="calc()"></div>
+    </div>
+    <div class="comp-row deductions-row">
+      <div><div class="row-label">Student loan payment</div><div class="row-note">monthly</div></div>
+      <div class="val neg"><input class="editable" id="loan-mo" value="0" oninput="calc()"><span class="unit">/mo</span></div>
+      <div class="val neg"><span id="loan-yr">—</span></div>
+    </div>
+    <div class="comp-row deductions-row">
+      <div><div class="row-label">Other debt payments</div><div class="row-note">credit cards, personal loans</div></div>
+      <div class="val neg"><input class="editable" id="debt-mo" value="167" oninput="calc()"><span class="unit">/mo</span></div>
+      <div class="val neg"><span id="debt-yr">—</span></div>
+    </div>
+    <div class="calc-row">
+      <div class="calc-label">&#x21B3; total deductions</div>
+      <div class="calc-val" id="ded-total-mo">—</div>
+      <div class="calc-val" id="ded-total-yr">—</div>
+    </div>
+  </div>
+
+  <!-- Take-home bar -->
+  <div class="total-bar">
+    <div class="total-row">
+      <div class="total-label">&#x1F3E0; Est. Take-Home Pay</div>
+      <div class="total-val bright" id="takehome-mo">—</div>
+      <div class="total-val bright" id="takehome-yr">—</div>
+    </div>
+    <div class="sub-row">
+      <div class="sub-label">gross income minus taxes &amp; deductions</div>
+      <div class="sub-val">/ month</div>
+      <div class="sub-val">/ year</div>
+    </div>
+  </div>
+
+  <!-- Expenses data card -->
+  <div class="data-card">
+    <div class="col-heads">
+      <div></div>
+      <div class="col-head">/ month</div>
+      <div class="col-head">/ year</div>
+    </div>
+
+    <!-- ── CAR ── -->
+    <div class="section-label car">&#x1F697; Car</div>
+    <div class="comp-row car-row">
+      <div><div class="row-label">Car insurance</div><div class="row-note">enter annual</div></div>
+      <div class="val neg"><span id="carins-mo">—</span></div>
+      <div class="val neg"><input class="editable" id="carins-yr" value="2400" oninput="calc()"></div>
+    </div>
+    <div class="comp-row car-row">
+      <div><div class="row-label">Car payment</div><div class="row-note">avg used car, modest financing</div></div>
+      <div class="val neg"><input class="editable" id="carpay-mo" value="400" oninput="calc()"><span class="unit">/mo</span></div>
+      <div class="val neg"><span id="carpay-yr">—</span></div>
+    </div>
+    <div class="comp-row car-row">
+      <div><div class="row-label">Gas</div></div>
+      <div class="val neg"><input class="editable" id="gas-mo" value="150" oninput="calc()"><span class="unit">/mo</span></div>
+      <div class="val neg"><span id="gas-yr">—</span></div>
+    </div>
+    <div class="comp-row car-row">
+      <div><div class="row-label">Maintenance &amp; registration</div><div class="row-note">enter annual</div></div>
+      <div class="val neg"><span id="carmaint-mo">—</span></div>
+      <div class="val neg"><input class="editable" id="carmaint-yr" value="800" oninput="calc()"></div>
+    </div>
+    <div class="calc-row">
+      <div class="calc-label">&#x21B3; total car costs</div>
+      <div class="calc-val" id="car-total-mo">—</div>
+      <div class="calc-val" id="car-total-yr">—</div>
+    </div>
+
+    <!-- ── HOUSING ── -->
+    <div class="section-label housing">&#x1F3E0; Housing &amp; Living</div>
+    <div class="comp-row housing-row">
+      <div><div class="row-label">Rent / mortgage</div></div>
+      <div class="val neg"><input class="editable" id="rent-mo" value="900" oninput="calc()"><span class="unit">/mo</span></div>
+      <div class="val neg"><span id="rent-yr">—</span></div>
+    </div>
+    <div class="comp-row housing-row">
+      <div><div class="row-label">Groceries</div></div>
+      <div class="val neg"><input class="editable" id="groc-mo" value="400" oninput="calc()"><span class="unit">/mo</span></div>
+      <div class="val neg"><span id="groc-yr">—</span></div>
+    </div>
+    <div class="comp-row housing-row">
+      <div><div class="row-label">Household supplies</div></div>
+      <div class="val neg"><input class="editable" id="house-mo" value="40" oninput="calc()"><span class="unit">/mo</span></div>
+      <div class="val neg"><span id="house-yr">—</span></div>
+    </div>
+    <div class="comp-row housing-row">
+      <div><div class="row-label">Electric</div></div>
+      <div class="val neg"><input class="editable" id="elec-mo" value="100" oninput="calc()"><span class="unit">/mo</span></div>
+      <div class="val neg"><span id="elec-yr">—</span></div>
+    </div>
+    <div class="comp-row housing-row">
+      <div><div class="row-label">Gas (home)</div></div>
+      <div class="val neg"><input class="editable" id="gashome-mo" value="40" oninput="calc()"><span class="unit">/mo</span></div>
+      <div class="val neg"><span id="gashome-yr">—</span></div>
+    </div>
+    <div class="comp-row housing-row">
+      <div><div class="row-label">Water / sewer</div></div>
+      <div class="val neg"><input class="editable" id="water-mo" value="30" oninput="calc()"><span class="unit">/mo</span></div>
+      <div class="val neg"><span id="water-yr">—</span></div>
+    </div>
+    <div class="comp-row housing-row">
+      <div><div class="row-label">Cell phone</div></div>
+      <div class="val neg"><input class="editable" id="cell-mo" value="60" oninput="calc()"><span class="unit">/mo</span></div>
+      <div class="val neg"><span id="cell-yr">—</span></div>
+    </div>
+    <div class="comp-row housing-row">
+      <div><div class="row-label">Streaming / subscriptions</div></div>
+      <div class="val neg"><input class="editable" id="stream-mo" value="35" oninput="calc()"><span class="unit">/mo</span></div>
+      <div class="val neg"><span id="stream-yr">—</span></div>
+    </div>
+    <div class="calc-row">
+      <div class="calc-label">&#x21B3; total housing &amp; living</div>
+      <div class="calc-val" id="housing-total-mo">—</div>
+      <div class="calc-val" id="housing-total-yr">—</div>
+    </div>
+
+    <!-- ── OTHER ── -->
+    <div class="section-label other">&#x2728; Other Spending</div>
+    <div class="comp-row other-row">
+      <div><div class="row-label">Dining out / sit-down restaurants</div></div>
+      <div class="val neg"><input class="editable" id="dining-mo" value="120" oninput="calc()"><span class="unit">/mo</span></div>
+      <div class="val neg"><span id="dining-yr">—</span></div>
+    </div>
+    <div class="comp-row other-row">
+      <div><div class="row-label">Food delivery (UberEats / DoorDash)</div></div>
+      <div class="val neg"><input class="editable" id="delivery-mo" value="120" oninput="calc()"><span class="unit">/mo</span></div>
+      <div class="val neg"><span id="delivery-yr">—</span></div>
+    </div>
+    <div class="comp-row other-row">
+      <div><div class="row-label">Healthcare out-of-pocket</div><div class="row-note">copays, meds, dental, vision — annual</div></div>
+      <div class="val neg"><span id="hcoop-mo">—</span></div>
+      <div class="val neg"><input class="editable" id="hcoop-yr" value="500" oninput="calc()"></div>
+    </div>
+    <div class="comp-row other-row">
+      <div><div class="row-label">Vacations / travel</div><div class="row-note">enter annual</div></div>
+      <div class="val neg"><span id="vac-mo">—</span></div>
+      <div class="val neg"><input class="editable" id="vac-yr" value="2000" oninput="calc()"></div>
+    </div>
+    <div class="comp-row other-row">
+      <div><div class="row-label">Gifts</div><div class="row-note">enter annual</div></div>
+      <div class="val neg"><span id="gifts-mo">—</span></div>
+      <div class="val neg"><input class="editable" id="gifts-yr" value="700" oninput="calc()"></div>
+    </div>
+    <div class="comp-row other-row">
+      <div><div class="row-label">Hair / personal care</div></div>
+      <div class="val neg"><input class="editable" id="hair-mo" value="40" oninput="calc()"><span class="unit">/mo</span></div>
+      <div class="val neg"><span id="hair-yr">—</span></div>
+    </div>
+    <div class="comp-row other-row">
+      <div><div class="row-label">Gym / fitness</div></div>
+      <div class="val neg"><input class="editable" id="gym-mo" value="40" oninput="calc()"><span class="unit">/mo</span></div>
+      <div class="val neg"><span id="gym-yr">—</span></div>
+    </div>
+    <div class="comp-row other-row">
+      <div><div class="row-label">Pets</div><div class="row-note">enter annual</div></div>
+      <div class="val neg"><span id="pets-mo">—</span></div>
+      <div class="val neg"><input class="editable" id="pets-yr" value="0" oninput="calc()"></div>
+    </div>
+    <div class="comp-row other-row">
+      <div><div class="row-label">Entertainment / fun money</div></div>
+      <div class="val neg"><input class="editable" id="ent-mo" value="200" oninput="calc()"><span class="unit">/mo</span></div>
+      <div class="val neg"><span id="ent-yr">—</span></div>
+    </div>
+    <div class="comp-row other-row">
+      <div><div class="row-label">Tithe / charity</div><div class="row-note">enter annual</div></div>
+      <div class="val neg"><span id="tithe-mo">—</span></div>
+      <div class="val neg"><input class="editable" id="tithe-yr" value="0" oninput="calc()"></div>
+    </div>
+    <div class="calc-row">
+      <div class="calc-label">&#x21B3; total other spending</div>
+      <div class="calc-val" id="other-total-mo">—</div>
+      <div class="calc-val" id="other-total-yr">—</div>
+    </div>
+  </div>
+
+  <!-- Total expenses bar -->
+  <div class="total-bar">
+    <div class="total-row">
+      <div class="total-label">&#x1F4B8; Total Expenses</div>
+      <div class="total-val dim" id="exp-mo">—</div>
+      <div class="total-val dim" id="exp-yr">—</div>
+    </div>
+    <div class="sub-row">
+      <div class="sub-label">car + housing + other spending</div>
+      <div class="sub-val">/ month</div>
+      <div class="sub-val">/ year</div>
+    </div>
+  </div>
+
+  <!-- Surplus bar -->
+  <div class="total-bar" id="surplus-bar">
+    <div class="total-row">
+      <div class="total-label">&#x2728; Surplus / Shortfall</div>
+      <div class="total-val" id="surplus-mo-disp">—</div>
+      <div class="total-val" id="surplus-yr-disp">—</div>
+    </div>
+    <div class="sub-row">
+      <div class="sub-label">take-home minus all expenses</div>
+      <div class="sub-val">/ month</div>
+      <div class="sub-val">/ year</div>
+    </div>
+  </div>
+
+  <!-- Surplus goals -->
+  <div class="surplus-goal-card">
+    <div class="surplus-goal-label">&#x1F4A1; surplus planning</div>
+    <div class="surplus-goal-q">Are you going to put this towards&hellip;</div>
+    <div class="goal-chips">
+      <div class="goal-chip" onclick="this.classList.toggle('active')">&#x1F393; Student loans</div>
+      <div class="goal-chip" onclick="this.classList.toggle('active')">&#x2708;&#xFE0F; Trips &amp; lifestyle</div>
+      <div class="goal-chip" onclick="this.classList.toggle('active')">&#x1F3E0; Saving for a house</div>
+      <div class="goal-chip" onclick="this.classList.toggle('active')">&#x1F697; Saving for a car</div>
+      <div class="goal-chip" onclick="this.classList.toggle('active')">&#x1F4B0; Emergency fund</div>
+      <div class="goal-chip" onclick="this.classList.toggle('active')">&#x1F4C8; Investing</div>
+      <div class="goal-chip" onclick="this.classList.toggle('active')">&#x2728; Other</div>
+    </div>
+  </div>
+
+  <!-- Chart -->
+  <div class="chart-card">
+    <div class="chart-title">where your gross income goes</div>
+    <div class="pie-wrap">
+      <svg id="pie-svg" width="220" height="220" viewBox="0 0 220 220"></svg>
+      <div class="pie-legend" id="pie-legend"></div>
+    </div>
+  </div>
+
+  <!-- Export -->
+  <div class="export-row">
+    <button class="btn primary" onclick="exportCSV()">Export for Google Sheets &#x2197;</button>
+    <button class="btn" onclick="window.print()">Print / Save PDF &#x1F5A8;</button>
+  </div>
+
+  <p style="margin-top:1.5rem;font-size:11px;color:var(--muted);text-align:center;font-family:var(--mono)">newgradfinances.com &middot; plan today. build tomorrow.</p>
+
+  <div style="margin-top:1.5rem;padding:1.1rem 1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:10px;font-size:0.76rem;color:var(--muted);line-height:1.7;font-family:var(--sans)">
+    <strong style="color:var(--stone)">Estimates only — single filers only.</strong> Federal tax is estimated using 2026 IRS brackets (per IRS Rev. Proc. 2025-32) with a $16,100 standard deduction. The seven 2026 brackets for single filers are: 10% ($0–$12,400), 12% ($12,401–$50,400), 22% ($50,401–$105,700), 24% ($105,701–$201,775), 32% ($201,776–$256,225), 35% ($256,226–$640,600), and 37% (over $640,600). Traditional 401k/403b, HSA, and FSA contributions are subtracted from gross income before applying all tax rates, reducing your estimated AGI. FICA (Social Security) and Medicare are calculated on full gross wages — in practice, Section 125 HSA/FSA contributions may also reduce FICA wages slightly, but this tool applies them to full gross as a conservative estimate. State and local taxes are applied to the same AGI as federal taxes. This tool does not account for tax credits, the alternative minimum tax, or state-specific deduction differences. Results are for single filers only and will differ for married or head-of-household filers. Always consult a licensed financial advisor or CPA for personalized guidance.<br><br>
+    Questions or feedback? <a href="mailto:asiyufy@south.edu" style="color:var(--accent);text-decoration:none">asiyufy@south.edu</a>
+  </div>
+
+</div>
+
+<script>
+// ── helpers ──
+function v(id){
+  const el=document.getElementById(id);
+  if(!el)return 0;
+  return parseFloat(el.value.replace(/,/g,''))||0;
+}
+function set(id,val){
+  const el=document.getElementById(id);
+  if(el)el.textContent=val;
+}
+function fmtMo(n){return '$'+Math.round(n).toLocaleString();}
+function fmtYr(n){return '$'+Math.round(n).toLocaleString();}
+
+// ── federal tax (2026, SINGLE filers only, standard deduction $16,100) ──
+// Brackets per IRS Rev. Proc. 2025-32 / Tax Foundation 2026 tables
+function calcFedTax(gross){
+  const taxable=Math.max(0,gross-16100);
+  if(taxable<=0)return 0;
+  let tax=0;
+  // [top of bracket, rate]
+  const brackets=[[12400,0.10],[50400,0.12],[105700,0.22],[201775,0.24],[256225,0.32],[640600,0.35]];
+  let prev=0;
+  for(const [top,rate] of brackets){
+    if(taxable<=prev)break;
+    tax+=(Math.min(taxable,top)-prev)*rate;
+    prev=top;
+  }
+  if(taxable>640600)tax+=(taxable-640600)*0.37;
+  return tax;
+}
+
+// ── chart colors ──
+const CHART_COLORS={
+  'Federal Tax':'#ef4444',
+  'FICA + Medicare':'#f97316',
+  'State/Local Tax':'#fb923c',
+  'Health Ins.':'#ec4899',
+  'Retirement':'#8b5cf6',
+  'Student Loans':'#6366f1',
+  'Other Debt':'#a78bfa',
+  'Car':'#3b82f6',
+  'Housing':'#f59e0b',
+  'Other':'#a855f7',
+  'Surplus':'#22c55e'
+};
+
+function calc(){
+  // Income
+  const salary=v('salary');
+  const prn=v('prn');
+  const signon=v('signon');
+  const gross=salary+prn+signon;
+
+  set('salary-mo',fmtMo(salary/12));
+  set('prn-mo',fmtMo(prn/12));
+  set('s-gross',fmtYr(gross));
+
+  // Pre-tax deductions that reduce AGI (401k, HSA, FSA)
+  // Note: retYr not yet computed — we'll peek at the values to get AGI first
+  const retYrForAgi=salary*(v('ret-pct')/100);
+  const hsaYr=v('hsa-yr');
+  const fsaYr=v('fsa-yr');
+  const agi=Math.max(0,gross-retYrForAgi-hsaYr-fsaYr);
+
+  set('agi-mo',fmtMo(agi/12));
+  set('agi-yr',fmtYr(agi));
+
+  // Taxes — federal & state/local applied to AGI; FICA/Medicare on full gross wages
+  const fedTax=calcFedTax(agi);
+  const ficaWage=Math.min(gross,176100);
+  const fica=ficaWage*0.062;
+  const medicare=gross*0.0145;
+  const stateTax=agi*(v('state-pct')/100);
+  const localTax=agi*(v('local-pct')/100);
+  const totalTax=fedTax+fica+medicare+stateTax+localTax;
+
+  set('fed-mo',fmtMo(fedTax/12));   set('fed-yr',fmtYr(fedTax));
+  set('fica-mo',fmtMo(fica/12));    set('fica-yr',fmtYr(fica));
+  set('med-mo',fmtMo(medicare/12)); set('med-yr',fmtYr(medicare));
+  set('state-mo',fmtMo(stateTax/12));
+  set('local-mo',fmtMo(localTax/12));
+  set('tax-total-mo',fmtMo(totalTax/12));
+  set('tax-total-yr',fmtYr(totalTax));
+
+  // Deductions
+  const healthYr=v('health-mo')*12;
+  const retYr=retYrForAgi; // already computed above for AGI
+  const loanYr=v('loan-mo')*12;
+  const debtYr=v('debt-mo')*12;
+  const totalDed=healthYr+retYr+hsaYr+fsaYr+loanYr+debtYr;
+
+  set('health-yr',fmtYr(healthYr));
+  set('ret-mo',fmtMo(retYr/12));
+  set('ret-yr-calc',fmtMo(retYr/12));
+  set('ret-yr',fmtYr(retYr));
+  set('hsa-mo',fmtMo(hsaYr/12));
+  set('fsa-mo',fmtMo(fsaYr/12));
+  set('loan-yr',fmtYr(loanYr));
+  set('debt-yr',fmtYr(debtYr));
+  set('ded-total-mo',fmtMo(totalDed/12));
+  set('ded-total-yr',fmtYr(totalDed));
+
+  // Take-home
+  const takeHomeYr=gross-totalTax-totalDed;
+  const takeHomeMo=takeHomeYr/12;
+  set('takehome-mo',fmtMo(takeHomeMo));
+  set('takehome-yr',fmtYr(takeHomeYr));
+  set('s-takehome',fmtYr(takeHomeYr));
+
+  // Car
+  const carInsYr=v('carins-yr');
+  const carPayYr=v('carpay-mo')*12;
+  const gasYr=v('gas-mo')*12;
+  const carMaintYr=v('carmaint-yr');
+  const totalCarYr=carInsYr+carPayYr+gasYr+carMaintYr;
+
+  set('carins-mo',fmtMo(carInsYr/12));
+  set('carpay-yr',fmtYr(carPayYr));
+  set('gas-yr',fmtYr(gasYr));
+  set('carmaint-mo',fmtMo(carMaintYr/12));
+  set('car-total-mo',fmtMo(totalCarYr/12));
+  set('car-total-yr',fmtYr(totalCarYr));
+
+  // Housing
+  const rentYr=v('rent-mo')*12;
+  const grocYr=v('groc-mo')*12;
+  const houseYr=v('house-mo')*12;
+  const elecYr=v('elec-mo')*12;
+  const gasHomeYr=v('gashome-mo')*12;
+  const waterYr=v('water-mo')*12;
+  const cellYr=v('cell-mo')*12;
+  const streamYr=v('stream-mo')*12;
+  const totalHousingYr=rentYr+grocYr+houseYr+elecYr+gasHomeYr+waterYr+cellYr+streamYr;
+
+  set('rent-yr',fmtYr(rentYr));
+  set('groc-yr',fmtYr(grocYr));
+  set('house-yr',fmtYr(houseYr));
+  set('elec-yr',fmtYr(elecYr));
+  set('gashome-yr',fmtYr(gasHomeYr));
+  set('water-yr',fmtYr(waterYr));
+  set('cell-yr',fmtYr(cellYr));
+  set('stream-yr',fmtYr(streamYr));
+  set('housing-total-mo',fmtMo(totalHousingYr/12));
+  set('housing-total-yr',fmtYr(totalHousingYr));
+
+  // Other
+  const diningYr=v('dining-mo')*12;
+  const deliveryYr=v('delivery-mo')*12;
+  const hcoopYr=v('hcoop-yr');
+  const vacYr=v('vac-yr');
+  const giftsYr=v('gifts-yr');
+  const hairYr=v('hair-mo')*12;
+  const gymYr=v('gym-mo')*12;
+  const petsYr=v('pets-yr');
+  const entYr=v('ent-mo')*12;
+  const titheYr=v('tithe-yr');
+  const totalOtherYr=diningYr+deliveryYr+hcoopYr+vacYr+giftsYr+hairYr+gymYr+petsYr+entYr+titheYr;
+
+  set('dining-yr',fmtYr(diningYr));
+  set('delivery-yr',fmtYr(deliveryYr));
+  set('hcoop-mo',fmtMo(hcoopYr/12));
+  set('vac-mo',fmtMo(vacYr/12));
+  set('gifts-mo',fmtMo(giftsYr/12));
+  set('hair-yr',fmtYr(hairYr));
+  set('gym-yr',fmtYr(gymYr));
+  set('pets-mo',fmtMo(petsYr/12));
+  set('ent-yr',fmtYr(entYr));
+  set('tithe-mo',fmtMo(titheYr/12));
+  set('other-total-mo',fmtMo(totalOtherYr/12));
+  set('other-total-yr',fmtYr(totalOtherYr));
+
+  // Total expenses (car+housing+other only — not taxes/deductions which are already subtracted)
+  const totalExpYr=totalCarYr+totalHousingYr+totalOtherYr;
+  set('exp-mo',fmtMo(totalExpYr/12));
+  set('exp-yr',fmtYr(totalExpYr));
+
+  // Surplus
+  const surplusYr=takeHomeYr-totalExpYr;
+  const surplusMo=surplusYr/12;
+
+  const smEl=document.getElementById('surplus-mo-disp');
+  const syEl=document.getElementById('surplus-yr-disp');
+  const scardEl=document.getElementById('s-surplus-card');
+  const svalEl=document.getElementById('s-surplus');
+  const ssubEl=document.getElementById('s-surplus-sub');
+  const sbarEl=document.getElementById('surplus-bar');
+
+  smEl.textContent=(surplusMo>=0?'':'-')+'$'+Math.abs(Math.round(surplusMo)).toLocaleString();
+  syEl.textContent=(surplusYr>=0?'':'-')+'$'+Math.abs(Math.round(surplusYr)).toLocaleString();
+  svalEl.textContent=(surplusMo>=0?'':'-')+'$'+Math.abs(Math.round(surplusMo)).toLocaleString();
+
+  if(surplusYr>=0){
+    smEl.className='total-val surplus-pos';
+    syEl.className='total-val surplus-pos';
+    svalEl.className='sum-val pos';
+    scardEl.className='sum-card positive';
+    ssubEl.textContent='per month · positive ✓';
+    sbarEl.style.background='var(--navy)';
+  } else {
+    smEl.className='total-val surplus-neg';
+    syEl.className='total-val surplus-neg';
+    svalEl.className='sum-val neg';
+    scardEl.className='sum-card negative';
+    ssubEl.textContent='per month · over budget ⚠';
+    sbarEl.style.background='#3b0a0a';
+  }
+
+  // Pie chart
+  const chartData=[
+    {label:'Federal Tax',    val:fedTax,                      color:'#ef4444'},
+    {label:'FICA + Medicare',val:fica+medicare,               color:'#f97316'},
+    {label:'State/Local Tax',val:stateTax+localTax,           color:'#fb923c'},
+    {label:'Health Ins.',    val:healthYr,                    color:'#ec4899'},
+    {label:'Retirement',     val:retYr,                       color:'#8b5cf6'},
+    {label:'Loans / Debt',   val:loanYr+debtYr,               color:'#6366f1'},
+    {label:'Car',            val:totalCarYr,                  color:'#14b8a6'},
+    {label:'Housing',        val:totalHousingYr,              color:'#f59e0b'},
+    {label:'Other',          val:totalOtherYr,                color:'#a855f7'},
+    {label:'Surplus',        val:Math.max(0,surplusYr),       color:'#22c55e'}
+  ].filter(d=>d.val>0);
+  renderPie(chartData, gross);
+}
+
+function exportCSV(){
+  // format helpers for CSV — always show $ and commas
+  const d=n=>'$'+Math.round(n).toLocaleString();
+  const mo=n=>'$'+Math.round(n)+'/mo';
+  const yr=n=>'$'+Math.round(n)+'/yr';
+  const tx=id=>document.getElementById(id).textContent;
+  const inp=id=>document.getElementById(id).value;
+
+  // selected surplus goals
+  const goals=[...document.querySelectorAll('.goal-chip.active')].map(c=>c.textContent.trim()).join(', ')||'(none selected)';
+
+  const rows=[
+    ['New Grad Budget Planner — ngf export'],
+    ['Category','Item','/ Month','/ Year'],
+    ['Income','Base Salary',        d(v('salary')/12),          d(v('salary'))],
+    ['Income','PRN / Side Income',  d(v('prn')/12),             d(v('prn'))],
+    ['Income','Sign-On Bonus',      '—',                        d(v('signon'))],
+    ['Income','GROSS TOTAL',        d((v('salary')+v('prn')+v('signon'))/12), d(v('salary')+v('prn')+v('signon'))],
+    [''],
+    ['Taxes','Federal Income Tax (2026)',  tx('fed-mo'),   tx('fed-yr')],
+    ['Taxes','FICA (Social Security)',     tx('fica-mo'),  tx('fica-yr')],
+    ['Taxes','Medicare',                   tx('med-mo'),   tx('med-yr')],
+    ['Taxes','State Tax ('+v('state-pct')+'%)', tx('state-mo'), tx('tax-total-yr')+' (total taxes)'],
+    ['Taxes','Local Tax ('+v('local-pct')+'%)', tx('local-mo'), ''],
+    ['Taxes','TOTAL TAXES',               tx('tax-total-mo'), tx('tax-total-yr')],
+    [''],
+    ['Deductions','Health Insurance',             mo(+inp('health-mo')),  tx('health-yr')],
+    ['Deductions','Retirement 401k/403b ('+v('ret-pct')+'%) [pre-tax]', tx('ret-mo'), tx('ret-yr')],
+    ['Deductions','HSA Contribution [pre-tax]', d(v('hsa-yr')/12),     d(v('hsa-yr'))],
+    ['Deductions','FSA Contribution [pre-tax]', d(v('fsa-yr')/12),     d(v('fsa-yr'))],
+    ['Deductions','Student Loans',             mo(+inp('loan-mo')),    tx('loan-yr')],
+    ['Deductions','Other Debt',                mo(+inp('debt-mo')),    tx('debt-yr')],
+    [''],
+    ['','Est. Adjusted Gross Income (tax basis)', tx('agi-mo'), tx('agi-yr')],
+    ['','ESTIMATED TAKE-HOME', tx('takehome-mo'), tx('takehome-yr')],
+    [''],
+    ['Car','Insurance',              d(v('carins-yr')/12),   d(v('carins-yr'))],
+    ['Car','Car Payment',            mo(v('carpay-mo')),      d(v('carpay-mo')*12)],
+    ['Car','Gas',                    mo(v('gas-mo')),         d(v('gas-mo')*12)],
+    ['Car','Maintenance',            d(v('carmaint-yr')/12), d(v('carmaint-yr'))],
+    ['Car','TOTAL CAR',              tx('car-total-mo'),      tx('car-total-yr')],
+    [''],
+    ['Housing','Rent / Mortgage',    mo(v('rent-mo')),        d(v('rent-mo')*12)],
+    ['Housing','Groceries',          mo(v('groc-mo')),        d(v('groc-mo')*12)],
+    ['Housing','Household Supplies', mo(v('house-mo')),       d(v('house-mo')*12)],
+    ['Housing','Electric',           mo(v('elec-mo')),        d(v('elec-mo')*12)],
+    ['Housing','Gas (home)',         mo(v('gashome-mo')),     d(v('gashome-mo')*12)],
+    ['Housing','Water / Sewer',      mo(v('water-mo')),       d(v('water-mo')*12)],
+    ['Housing','Cell Phone',         mo(v('cell-mo')),        d(v('cell-mo')*12)],
+    ['Housing','Streaming',          mo(v('stream-mo')),      d(v('stream-mo')*12)],
+    ['Housing','TOTAL HOUSING',      tx('housing-total-mo'),  tx('housing-total-yr')],
+    [''],
+    ['Other','Dining Out (sit-down)', mo(v('dining-mo')),      d(v('dining-mo')*12)],
+    ['Other','Food Delivery (UberEats/DoorDash)', mo(v('delivery-mo')), d(v('delivery-mo')*12)],
+    ['Other','Healthcare OOP',       d(v('hcoop-yr')/12),    d(v('hcoop-yr'))],
+    ['Other','Vacations',            d(v('vac-yr')/12),      d(v('vac-yr'))],
+    ['Other','Gifts',                d(v('gifts-yr')/12),    d(v('gifts-yr'))],
+    ['Other','Hair / Personal Care', mo(v('hair-mo')),        d(v('hair-mo')*12)],
+    ['Other','Gym',                  mo(v('gym-mo')),         d(v('gym-mo')*12)],
+    ['Other','Pets',                 d(v('pets-yr')/12),     d(v('pets-yr'))],
+    ['Other','Entertainment',        mo(v('ent-mo')),         d(v('ent-mo')*12)],
+    ['Other','Tithe / Charity',      d(v('tithe-yr')/12),    d(v('tithe-yr'))],
+    ['Other','TOTAL OTHER (dining + delivery + entertainment + misc)', tx('other-total-mo'), tx('other-total-yr')],
+    [''],
+    ['','TOTAL EXPENSES',  tx('exp-mo'),          tx('exp-yr')],
+    ['','SURPLUS / SHORTFALL', tx('surplus-mo-disp'), tx('surplus-yr-disp')],
+    [''],
+    ['Surplus goals','Planning to put surplus towards:',goals,''],
+  ];
+  const csv=rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download='ngf_budget_planner.csv';
+  a.click();
+}
+
+function renderPie(data, gross){
+  const svg=document.getElementById('pie-svg');
+  const legend=document.getElementById('pie-legend');
+  const total=data.reduce((s,d)=>s+d.val,0);
+  if(total<=0){svg.innerHTML='';legend.innerHTML='';return;}
+  const cx=110,cy=110,R=95,r=50;
+  let paths='',ang=-Math.PI/2;
+  data.forEach(d=>{
+    const slice=(d.val/total)*2*Math.PI;
+    const end=ang+slice;
+    const x1=cx+R*Math.cos(ang),y1=cy+R*Math.sin(ang);
+    const x2=cx+R*Math.cos(end), y2=cy+R*Math.sin(end);
+    const ix1=cx+r*Math.cos(end), iy1=cy+r*Math.sin(end);
+    const ix2=cx+r*Math.cos(ang), iy2=cy+r*Math.sin(ang);
+    const la=slice>Math.PI?1:0;
+    paths+=`<path d="M${x1} ${y1} A${R} ${R} 0 ${la} 1 ${x2} ${y2} L${ix1} ${iy1} A${r} ${r} 0 ${la} 0 ${ix2} ${iy2}Z" fill="${d.color}" opacity="0.92"><title>${d.label}: ${fmtYr(d.val)} (${gross>0?Math.round(d.val/gross*100):0}%)</title></path>`;
+    ang=end;
+  });
+  // Center label
+  const surplus=data.find(d=>d.label==='Surplus');
+  const surplusAmt=surplus?surplus.val:0;
+  const pct=gross>0?Math.round(surplusAmt/gross*100):0;
+  const centerColor=surplusAmt>0?'#22c55e':'#ef4444';
+  paths+=`<text x="${cx}" y="${cy-7}" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#78716c">surplus</text>`;
+  paths+=`<text x="${cx}" y="${cy+10}" text-anchor="middle" font-family="DM Mono,monospace" font-size="18" font-weight="600" fill="${centerColor}">${pct}%</text>`;
+  svg.innerHTML=paths;
+  // Legend
+  legend.innerHTML=data.map(d=>{
+    const p=gross>0?Math.round(d.val/gross*100):0;
+    return `<div class="pie-legend-item"><span class="pie-swatch" style="background:${d.color}"></span><span class="pie-legend-label">${d.label}</span><span class="pie-legend-pct">${p}%</span></div>`;
+  }).join('');
+}
+
+calc();
+</script>
+</body>
+</html>
