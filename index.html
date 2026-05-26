@@ -9,13 +9,13 @@
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --accent:#0d9488;--navy:#1c2b3a;--stone:#292524;--muted:#78716c;
-  --border:#d3d0c9;
+  --border:#dde3dd;
   --mono:"DM Mono",monospace;--sans:"Carlito","Calibri",sans-serif;
 }
-body{font-family:var(--sans);background:#eaede8;color:var(--stone)}
+body{font-family:var(--sans);background:#f0f2f0;color:var(--stone)}
 
 /* ── STICKY HEADER ── */
-.site-header{position:sticky;top:0;z-index:200;background:#0d111a;border-bottom:1px solid rgba(36,48,68,.8);padding:.75rem 1.5rem;display:flex;align-items:center;gap:14px;box-shadow:0 2px 12px rgba(0,0,0,.35)}
+.site-header{position:sticky;top:0;z-index:200;background:#0d111a;border-bottom:2px solid #0d9488;padding:.75rem 1.5rem;display:flex;align-items:center;gap:14px;box-shadow:0 2px 12px rgba(0,0,0,.35)}
 .hdr-logo{width:42px;height:42px;border-radius:50%;border:2px solid rgba(13,148,136,.5);background:#0d1520;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .hdr-home{display:flex;align-items:center;gap:14px;flex:1;text-decoration:none}
 .hdr-home:hover .hdr-name{opacity:.85}
@@ -67,12 +67,12 @@ body{font-family:var(--sans);background:#eaede8;color:var(--stone)}
 .tool-arrow{font-size:20px;color:var(--border);transition:color .2s,transform .2s;flex-shrink:0}
 
 /* ── FOOTER ── */
-.site-footer{background:#fff;border-top:2px solid #0d111a;padding:2rem 1.5rem;text-align:center}
+.site-footer{background:#0d111a;border-top:2px solid #0d9488;padding:2rem 1.5rem;text-align:center}
 .footer-logo-link{display:inline-flex;align-items:center;gap:.6rem;text-decoration:none;margin-bottom:.75rem}
 .footer-logo-circle{width:36px;height:36px;border-radius:50%;border:2px solid rgba(13,148,136,.5);background:#0d1520;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.footer-name{font-weight:700;font-size:.9rem;color:#111;letter-spacing:.06em;text-transform:uppercase;font-family:var(--sans)}
-.site-footer p{font-size:.75rem;color:var(--muted);line-height:1.7}
-.site-footer a{color:var(--accent);text-decoration:none}
+.footer-name{font-weight:700;font-size:.9rem;color:#fff;letter-spacing:.06em;text-transform:uppercase;font-family:var(--sans)}
+.site-footer p{font-size:.75rem;color:rgba(255,255,255,.4);line-height:1.7}
+.site-footer a{color:#5eead4;text-decoration:none}
 .site-footer a:hover{text-decoration:underline}
 
 @media(max-width:480px){
