@@ -12,7 +12,19 @@
   --border:#d3d0c9;
   --mono:"DM Mono",monospace;--sans:"Carlito","Calibri",sans-serif;
 }
-body{font-family:var(--sans);background:#fff;color:var(--stone)}
+body{font-family:var(--sans);background:#eaede8;color:var(--stone)}
+
+/* ── STICKY HEADER ── */
+.site-header{position:sticky;top:0;z-index:200;background:#0d111a;border-bottom:1px solid rgba(36,48,68,.8);padding:.75rem 1.5rem;display:flex;align-items:center;gap:14px;box-shadow:0 2px 12px rgba(0,0,0,.35)}
+.hdr-logo{width:42px;height:42px;border-radius:50%;border:2px solid rgba(13,148,136,.5);background:#0d1520;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hdr-home{display:flex;align-items:center;gap:14px;flex:1;text-decoration:none}
+.hdr-home:hover .hdr-name{opacity:.85}
+.hdr-brand{}
+.hdr-name{font-size:14px;font-weight:700;letter-spacing:.08em;color:#fff;text-transform:uppercase;line-height:1.2}
+.hdr-name span{color:#4a9fd4}
+.hdr-tag{font-family:var(--mono);font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-top:2px}
+.hdr-badge{display:flex;align-items:center;gap:.45rem;background:rgba(13,148,136,.15);border:1px solid rgba(13,148,136,.35);color:#5eead4;font-family:var(--mono);font-size:9px;letter-spacing:.11em;text-transform:uppercase;padding:4px 11px;border-radius:999px;flex-shrink:0}
+.hdr-badge::before{content:'';width:5px;height:5px;border-radius:50%;background:#5eead4;flex-shrink:0}
 
 /* ── HERO ── */
 .hero{background:var(--navy);padding:3rem 1.5rem}
@@ -55,10 +67,13 @@ body{font-family:var(--sans);background:#fff;color:var(--stone)}
 .tool-arrow{font-size:20px;color:var(--border);transition:color .2s,transform .2s;flex-shrink:0}
 
 /* ── FOOTER ── */
-.footer{max-width:680px;margin:0 auto;padding:0 1.5rem 3rem}
-.footer-disclaimer{font-size:11px;color:var(--muted);line-height:1.8;border-top:1px solid var(--border);padding-top:1.5rem}
-.footer-disclaimer strong{color:var(--stone)}
-.footer-disclaimer a{color:var(--accent);text-decoration:none}
+.site-footer{background:#fff;border-top:2px solid #0d111a;padding:2rem 1.5rem;text-align:center}
+.footer-logo-link{display:inline-flex;align-items:center;gap:.6rem;text-decoration:none;margin-bottom:.75rem}
+.footer-logo-circle{width:36px;height:36px;border-radius:50%;border:2px solid rgba(13,148,136,.5);background:#0d1520;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.footer-name{font-weight:700;font-size:.9rem;color:#111;letter-spacing:.06em;text-transform:uppercase;font-family:var(--sans)}
+.site-footer p{font-size:.75rem;color:var(--muted);line-height:1.7}
+.site-footer a{color:var(--accent);text-decoration:none}
+.site-footer a:hover{text-decoration:underline}
 
 @media(max-width:480px){
   .tool-row{grid-template-columns:30px 1fr}
@@ -68,6 +83,29 @@ body{font-family:var(--sans);background:#fff;color:var(--stone)}
 </style>
 </head>
 <body>
+
+<!-- Sticky Header -->
+<div class="site-header">
+  <a href="index.html" class="hdr-home">
+    <div class="hdr-logo">
+      <svg viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
+        <circle cx="19" cy="14" r="10" stroke="#0d9488" stroke-width="1.5" fill="none"/>
+        <path d="M11 14 L19 6 L27 14" stroke="#4db8c8" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M16 14 L19 10 L22 14" stroke="#4db8c8" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+        <path d="M19 10 L19 24" stroke="#4db8c8" stroke-width="1" stroke-dasharray="2 2"/>
+        <rect x="17.5" y="4.5" width="3" height="2.5" rx=".4" fill="#0d9488"/>
+        <line x1="8" y1="24" x2="30" y2="24" stroke="#0d9488" stroke-width="1.2"/>
+        <line x1="6" y1="24" x2="8" y2="24" stroke="#0d9488" stroke-width="2" stroke-linecap="round"/>
+        <line x1="30" y1="24" x2="32" y2="24" stroke="#0d9488" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="hdr-brand">
+      <div class="hdr-name">New Grad <span>Finances</span></div>
+      <div class="hdr-tag">Plan Today. Build Tomorrow.</div>
+    </div>
+  </a>
+  <div class="hdr-badge">Always free</div>
+</div>
 
 <!-- Hero -->
 <div class="hero">
@@ -122,18 +160,8 @@ body{font-family:var(--sans);background:#fff;color:var(--stone)}
 <div class="tools-section">
   <div class="section-head">Tools &amp; Resources</div>
 
-  <a class="tool-row" href="loancalculator.html">
-    <div class="tool-num">01</div>
-    <div class="tool-body">
-      <div class="tool-name">Student Loan Repayment Calculator</div>
-      <div class="tool-desc">Compare PSLF, RAP, and Standard repayment plans side-by-side. Enter your balance and see monthly payments, total cost, and years to payoff.</div>
-      <div class="tool-tag">Calculator</div>
-    </div>
-    <div class="tool-arrow">→</div>
-  </a>
-
   <a class="tool-row" href="2jobs-NEW.html">
-    <div class="tool-num">02</div>
+    <div class="tool-num">01</div>
     <div class="tool-body">
       <div class="tool-name">Job Offer Comparison Tool</div>
       <div class="tool-desc">Go beyond base salary — compare two offers across total compensation, benefits, insurance, mileage, state taxes, and qualitative factors.</div>
@@ -142,18 +170,8 @@ body{font-family:var(--sans);background:#fff;color:var(--stone)}
     <div class="tool-arrow">→</div>
   </a>
 
-  <a class="tool-row" href="loan-survival-guide.html">
-    <div class="tool-num">03</div>
-    <div class="tool-body">
-      <div class="tool-name">Student Loan Survival Guide</div>
-      <div class="tool-desc">A plain-language guide to federal loan types, repayment options, PSLF eligibility, and what to prioritize in year one out of school.</div>
-      <div class="tool-tag">Guide &middot; 2026 Edition</div>
-    </div>
-    <div class="tool-arrow">→</div>
-  </a>
-
   <a class="tool-row" href="budget.html">
-    <div class="tool-num">04</div>
+    <div class="tool-num">02</div>
     <div class="tool-body">
       <div class="tool-name">New Grad Budget Planner</div>
       <div class="tool-desc">Map your full financial picture — enter your salary, side income, taxes, deductions, and monthly expenses to see your take-home pay and monthly surplus.</div>
@@ -162,15 +180,48 @@ body{font-family:var(--sans);background:#fff;color:var(--stone)}
     <div class="tool-arrow">→</div>
   </a>
 
+  <a class="tool-row" href="loancalculator.html">
+    <div class="tool-num">03</div>
+    <div class="tool-body">
+      <div class="tool-name">Student Loan Repayment Calculator</div>
+      <div class="tool-desc">Compare PSLF, RAP, and Standard repayment plans side-by-side. Enter your balance and see monthly payments, total cost, and years to payoff.</div>
+      <div class="tool-tag">Calculator</div>
+    </div>
+    <div class="tool-arrow">→</div>
+  </a>
+
+  <a class="tool-row" href="loan-survival-guide.html">
+    <div class="tool-num">04</div>
+    <div class="tool-body">
+      <div class="tool-name">Student Loan Survival Guide</div>
+      <div class="tool-desc">A plain-language guide to federal loan types, repayment options, PSLF eligibility, and what to prioritize in year one out of school.</div>
+      <div class="tool-tag">Guide &middot; 2026 Edition</div>
+    </div>
+    <div class="tool-arrow">→</div>
+  </a>
+
 </div>
 
 <!-- Footer -->
-<div class="footer">
-  <div class="footer-disclaimer">
-    <strong>Educational use only.</strong> All tools are provided free of charge for informational and educational purposes. Nothing on this site constitutes financial, legal, or professional advice. No products are sold or promoted. Individual results will vary. Consult a licensed financial advisor or certified student loan advisor before making major financial decisions.<br><br>
-    Questions or feedback? <a href="mailto:asiyufy@south.edu">asiyufy@south.edu</a>
-  </div>
-</div>
+<footer class="site-footer">
+  <a href="index.html" class="footer-logo-link">
+    <div class="footer-logo-circle">
+      <svg viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" width="22" height="22">
+        <circle cx="19" cy="14" r="10" stroke="#0d9488" stroke-width="1.5" fill="none"/>
+        <path d="M11 14 L19 6 L27 14" stroke="#4db8c8" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M16 14 L19 10 L22 14" stroke="#4db8c8" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+        <path d="M19 10 L19 24" stroke="#4db8c8" stroke-width="1" stroke-dasharray="2 2"/>
+        <rect x="17.5" y="4.5" width="3" height="2.5" rx=".4" fill="#0d9488"/>
+        <line x1="8" y1="24" x2="30" y2="24" stroke="#0d9488" stroke-width="1.2"/>
+        <line x1="6" y1="24" x2="8" y2="24" stroke="#0d9488" stroke-width="2" stroke-linecap="round"/>
+        <line x1="30" y1="24" x2="32" y2="24" stroke="#0d9488" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <span class="footer-name">New Grad Finances</span>
+  </a>
+  <p>Educational use only. Not financial advice. &nbsp;|&nbsp; No products sold or promoted.</p>
+  <p style="margin-top:.5rem;">Questions or feedback? <a href="mailto:asiyufy@south.edu">asiyufy@south.edu</a></p>
+</footer>
 
 </body>
 </html>
