@@ -215,13 +215,13 @@
 
     .computed-row {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
       gap: 2rem;
       background: var(--bg-input);
       border-radius: 10px;
       padding: 1.25rem 1.5rem;
     }
-    @media (max-width: 560px) { .computed-row { grid-template-columns: 1fr; gap: 1.25rem; } }
+    @media (max-width: 700px) { .computed-row { grid-template-columns: 1fr; gap: 1.25rem; } }
 
     .computed-item .c-label {
       font-size: 0.78rem;
@@ -337,7 +337,7 @@
     }
 
     .card-bottom {
-      margin-top: auto;
+      margin-top: 1.25rem;
       display: flex;
       flex-direction: column;
       border-top: 1px solid var(--border);
@@ -814,7 +814,7 @@
       <div class="input-grid" style="grid-template-columns:repeat(3,1fr)">
 
         <div class="input-group">
-          <label for="hsaContrib">HSA Contribution <span style="font-weight:400;color:var(--dim);">(max $4,400/yr)</span></label>
+          <label for="hsaContrib">HSA Contribution<br><span style="font-weight:400;font-size:0.7rem;color:var(--dim);">max $4,400/yr</span></label>
           <div class="input-wrap">
             <span class="input-pre">$</span>
             <input type="number" id="hsaContrib" class="has-pre" value="4400" min="0" max="4400" step="100" oninput="calculate()">
@@ -822,7 +822,7 @@
         </div>
 
         <div class="input-group">
-          <label for="retirementContrib">401k / 403b Contribution <span style="font-weight:400;color:var(--dim);">(max $24,500/yr)</span></label>
+          <label for="retirementContrib">401k / 403b Contribution<br><span style="font-weight:400;font-size:0.7rem;color:var(--dim);">max $24,500/yr</span></label>
           <div class="input-wrap">
             <span class="input-pre">$</span>
             <input type="number" id="retirementContrib" class="has-pre" value="500" min="0" max="24500" step="500" oninput="calculate()">
@@ -830,25 +830,22 @@
         </div>
 
         <div class="input-group">
-          <label for="numDependents">Number of Dependents <span style="font-weight:400;color:var(--dim);">($50/mo reduction each)</span></label>
+          <label for="numDependents">Number of Dependents<br><span style="font-weight:400;font-size:0.7rem;color:var(--dim);">$50/mo reduction each</span></label>
           <div class="input-wrap">
             <input type="number" id="numDependents" value="0" min="0" max="20" step="1" oninput="calculate()" style="padding-left:0.9rem;">
           </div>
         </div>
 
       </div>
-
-      <div style="display:flex;justify-content:flex-end;margin-top:0.75rem;">
-        <div style="background:rgba(45,219,128,0.06);border:1px solid rgba(45,219,128,0.22);border-radius:8px;padding:0.6rem 0.9rem;min-width:200px;">
-          <div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:var(--dim);margin-bottom:0.2rem;">Effective AGI (Year 1)</div>
-          <div id="out-effectiveAGI" style="font-family:'Archivo',sans-serif;font-weight:900;font-size:1.4rem;color:var(--green-dark);">$45,100</div>
-          <div style="font-size:0.67rem;color:var(--dim);margin-top:0.1rem;">Used to calculate RAP bracket &amp; payment</div>
-        </div>
-      </div>
     </div>
 
     <hr class="divider">
     <div class="computed-row">
+      <div class="computed-item">
+        <div class="c-label">Effective AGI (Year 1)</div>
+        <div class="c-value" id="out-effectiveAGI" style="font-size:1.6rem;">—</div>
+        <div class="c-sub">Used to calculate RAP bracket &amp; payment</div>
+      </div>
       <div class="computed-item">
         <div class="c-label">RAP Payment Rate (based on Effective AGI bracket)</div>
         <div class="c-value" id="out-rapRate">4%</div>
@@ -1638,7 +1635,7 @@
       tile.innerHTML = `
         <div class="acc-tile-year">${yr}<span>yr${yr > 1 ? 's' : ''}</span></div>
         <div class="acc-tile-pmt">${fmt(pmt)}<span style="font-size:.65rem;color:var(--dim);font-weight:500">/mo</span></div>
-        <div class="acc-tile-label">Extra vs. 10-yr</div>
+        <div class="acc-tile-label">Extra vs. Standard</div>
         <div class="acc-tile-extra">${extraPerMo > 0 ? '+' + fmt(extraPerMo) + '/mo' : '—'}</div>
         <hr class="acc-divider">
         <div class="acc-tile-row">
