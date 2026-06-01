@@ -768,7 +768,7 @@
 <section class="hero">
   <div class="hero-eyebrow">Student Loan Repayment Calculator</div>
   <h1>Three Ways to Pay Off Your Student Loans</h1>
-  <p>Compare PSLF, Repayment Assistance Plan (RAP), and Standard Aggressive Repayment side by side. Enter your numbers below.</p>
+  <p>Compare PSLF, Repayment Assistance Plan (RAP), and Standard Repayment side by side. Enter your numbers below.</p>
 </section>
 
 <!-- ===== MAIN ===== -->
@@ -829,14 +829,21 @@
           </div>
         </div>
 
-        <div style="display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:0.1rem;">
-          <div style="background:rgba(45,219,128,0.06);border:1px solid rgba(45,219,128,0.22);border-radius:8px;padding:0.6rem 0.9rem;">
-            <div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:var(--dim);margin-bottom:0.2rem;">Effective AGI (Year 1)</div>
-            <div id="out-effectiveAGI" style="font-family:'Archivo',sans-serif;font-weight:900;font-size:1.4rem;color:var(--green-dark);">$45,100</div>
-            <div style="font-size:0.67rem;color:var(--dim);margin-top:0.1rem;">Used to calculate RAP bracket &amp; payment</div>
+        <div class="input-group">
+          <label for="numDependents">Number of Dependents <span style="font-weight:400;color:var(--dim);">($50/mo reduction each)</span></label>
+          <div class="input-wrap">
+            <input type="number" id="numDependents" value="0" min="0" max="20" step="1" oninput="calculate()" style="padding-left:0.9rem;">
           </div>
         </div>
 
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;margin-top:0.75rem;">
+        <div style="background:rgba(45,219,128,0.06);border:1px solid rgba(45,219,128,0.22);border-radius:8px;padding:0.6rem 0.9rem;min-width:200px;">
+          <div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:var(--dim);margin-bottom:0.2rem;">Effective AGI (Year 1)</div>
+          <div id="out-effectiveAGI" style="font-family:'Archivo',sans-serif;font-weight:900;font-size:1.4rem;color:var(--green-dark);">$45,100</div>
+          <div style="font-size:0.67rem;color:var(--dim);margin-top:0.1rem;">Used to calculate RAP bracket &amp; payment</div>
+        </div>
       </div>
     </div>
 
@@ -903,7 +910,7 @@
         <div class="forgiven-box">
           <div class="fg-label">Balance Forgiven (tax-free) after 10 years</div>
           <div class="fg-value" id="out-pslfForgiven">$287,770</div>
-          <div class="fg-note">Requires qualifying employer &amp; 120 on-time payments</div>
+          <div class="fg-note">Estimates assume all 120 payments qualify and employment remains continuously eligible. Requires qualifying employer, repayment plan, and loan type.</div>
         </div>
         <div class="pros-cons">
           <div class="pc-heading pros">Pros</div>
@@ -956,9 +963,9 @@
 
       <div class="card-bottom">
         <div class="forgiven-box">
-          <div class="fg-label">Balance Forgiven (may be taxable) after 30 years</div>
+          <div class="fg-label">Balance Forgiven after 30 years</div>
           <div class="fg-value" id="out-rapForgiven">—</div>
-          <div class="fg-note">Forgiven amount may be treated as ordinary income</div>
+          <div class="fg-note">Tax treatment depends on federal law at the time forgiveness occurs — subject to change.</div>
         </div>
         <div class="pros-cons">
           <div class="pc-heading pros">Pros</div>
@@ -971,7 +978,7 @@
           <div class="pc-heading cons">Cons</div>
           <ul class="pc-list cons">
             <li>Long horizon — 30 years</li>
-            <li>Forgiven amount may be taxable</li>
+            <li>Tax treatment at forgiveness depends on law at the time</li>
             <li>Payments rise as income grows</li>
           </ul>
         </div>
@@ -981,14 +988,14 @@
     <!-- OPTION 3: STANDARD AGGRESSIVE 10-year -->
     <div class="option-card aggressive">
       <div class="opt-badge">Option 3</div>
-      <h3 class="opt-title">Standard Aggressive</h3>
-      <p class="opt-sub">Fixed amortization on a 10-year schedule — no income adjustments, fastest payoff</p>
+      <h3 class="opt-title">Standard</h3>
+      <p class="opt-sub">Fixed amortization — term set by your loan balance. No income adjustments, fastest payoff.</p>
 
       <div class="stats-grid">
         <div class="stat-item">
           <div class="s-label">Timeline</div>
-          <div class="s-value">10 years</div>
-          <div class="s-sub">120 payments</div>
+          <div class="s-value" id="out-stdYears">—</div>
+          <div class="s-sub" id="out-stdPayments">—</div>
         </div>
         <div class="stat-item">
           <div class="s-label">Monthly Payment</div>
@@ -1018,7 +1025,7 @@
             <li>Fixed, predictable payment every month</li>
             <li>No reliance on government programs</li>
             <li>Lowest total interest of all options</li>
-            <li>Debt-free in 10 years</li>
+            <li>Debt-free in <span id="out-stdYearsPro">—</span> years</li>
           </ul>
           <div class="pc-heading cons">Cons</div>
           <ul class="pc-list cons">
@@ -1027,8 +1034,29 @@
             <li>Requires strong cash flow from day one</li>
           </ul>
           <div style="margin-top:1rem;padding:0.75rem 0.9rem;background:var(--agg-bg);border:1px solid var(--agg-border);border-radius:8px;">
-            <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--dim);margin-bottom:0.3rem;">Also Available from the Federal Government</div>
-            <div style="font-size:0.78rem;color:var(--muted);line-height:1.55;">Standard fixed-rate repayment plans are also offered at <strong style="color:var(--text);">15, 20, and 25-year terms</strong> — with lower monthly payments but more total interest paid over time. See <a href="https://studentaid.gov/manage-loans/repayment/plans" target="_blank" rel="noopener noreferrer" style="color:var(--agg);text-decoration:none;font-weight:600;">studentaid.gov</a> for details.</div>
+            <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--dim);margin-bottom:0.5rem;">Term Selected Based on Your Loan Balance</div>
+            <div style="font-size:0.75rem;color:var(--muted);margin-bottom:0.6rem;line-height:1.5;">Your repayment term is automatically set based on your total federal student loan balance:</div>
+            <table style="width:100%;border-collapse:collapse;font-size:0.76rem;">
+              <tbody>
+                <tr id="tier-row-10" style="border-radius:4px;">
+                  <td style="padding:3px 6px 3px 0;color:var(--dim);">Up to $24,999</td>
+                  <td style="padding:3px 0;text-align:right;font-weight:600;color:var(--text);">10 yrs · 120 payments</td>
+                </tr>
+                <tr id="tier-row-15">
+                  <td style="padding:3px 6px 3px 0;color:var(--dim);">$25,000 – $49,999</td>
+                  <td style="padding:3px 0;text-align:right;font-weight:600;color:var(--text);">15 yrs · 180 payments</td>
+                </tr>
+                <tr id="tier-row-20">
+                  <td style="padding:3px 6px 3px 0;color:var(--dim);">$50,000 – $99,999</td>
+                  <td style="padding:3px 0;text-align:right;font-weight:600;color:var(--text);">20 yrs · 240 payments</td>
+                </tr>
+                <tr id="tier-row-25">
+                  <td style="padding:3px 6px 3px 0;color:var(--dim);">$100,000 or more</td>
+                  <td style="padding:3px 0;text-align:right;font-weight:600;color:var(--text);">25 yrs · 300 payments</td>
+                </tr>
+              </tbody>
+            </table>
+            <div style="margin-top:0.5rem;font-size:0.72rem;color:var(--dim);">↑ Your current balance falls in the highlighted tier above.</div>
           </div>
         </div>
       </div>
@@ -1065,8 +1093,8 @@
           <td class="td-num td-idr" id="tbl-rapForgiven">— <span style="font-size:.8rem;font-weight:500;color:var(--dim)">(taxable)</span></td>
         </tr>
         <tr>
-          <td><div class="strat-cell"><div class="strat-dot" style="background:var(--agg)"></div>Standard Aggressive (10-yr)</div></td>
-          <td class="td-num">10 yrs</td>
+          <td><div class="strat-cell"><div class="strat-dot" style="background:var(--agg)"></div>Standard (<span id="tbl-stdYears">—</span>)</div></td>
+          <td class="td-num" id="tbl-stdYearsCol">—</td>
           <td class="td-num td-agg" id="tbl-stdMonthly">—</td>
           <td class="td-num" id="tbl-stdTotal">—</td>
           <td class="td-num td-dim">$0</td>
@@ -1111,7 +1139,7 @@
   <div class="adv-card">
     <div class="adv-badge">Advanced</div>
     <h2 class="adv-title">Employer CARES Act Contribution Calculator</h2>
-    <p class="adv-desc">Under the CARES Act (extended through 2025), employers can contribute up to <strong>$5,250/year ($437.50/month)</strong> tax-free toward an employee's student loans. Enter your employer's annual contribution below to see how it accelerates your Standard Aggressive (10-yr) payoff — using the loan details entered above.</p>
+    <p class="adv-desc">Under the CARES Act (extended through 2025), employers can contribute up to <strong>$5,250/year ($437.50/month)</strong> tax-free toward an employee's student loans. Enter your employer's annual contribution below to see how it accelerates your Standard Repayment payoff — using the loan details entered above.</p>
 
     <div class="adv-input-row">
       <div class="input-group">
@@ -1132,7 +1160,7 @@
       <!-- Baseline: $0 employer -->
       <div class="compare-col baseline">
         <div class="compare-col-label">Baseline</div>
-        <div class="compare-col-title">Standard Aggressive (10-yr) — $0 Employer</div>
+        <div class="compare-col-title">Standard — $0 Employer</div>
         <div class="compare-stats">
           <div class="cs-row">
             <span class="cs-label">Your monthly payment</span>
@@ -1164,7 +1192,7 @@
       <!-- With CARES employer contribution -->
       <div class="compare-col with-cares">
         <div class="compare-col-label">With Employer Contribution</div>
-        <div class="compare-col-title">Standard Aggressive (10-yr) + Employer</div>
+        <div class="compare-col-title">Standard + Employer</div>
         <div class="compare-stats">
           <div class="cs-row">
             <span class="cs-label">Your monthly payment</span>
@@ -1221,9 +1249,9 @@
   <div class="acc-card">
     <div class="adv-badge">Advanced</div>
     <h2 class="adv-title">What If I Pay More Each Month?</h2>
-    <p class="adv-desc">How much would you need to pay per month to pay off your loan ahead of the 10-year Standard Aggressive schedule? Each card shows the required monthly payment, the extra amount vs. your standard payment, and how much interest you save — all based on the loan details above.</p>
+    <p class="adv-desc">How much would you need to pay per month to pay off your loan ahead of the Standard Repayment schedule? Each card shows the required monthly payment, the extra amount vs. your standard payment, and how much interest you save — all based on the loan details above.</p>
     <div style="display:inline-flex;align-items:baseline;gap:0.6rem;background:var(--agg-bg);border:1px solid var(--agg-border);border-radius:8px;padding:0.6rem 1.1rem;margin-bottom:0.25rem;">
-      <span style="font-size:0.75rem;font-weight:600;color:var(--muted);">Your 10-yr Standard Aggressive payment:</span>
+      <span style="font-size:0.75rem;font-weight:600;color:var(--muted);">Your Standard Repayment payment:</span>
       <span id="acc-base-reminder" style="font-family:'Archivo',sans-serif;font-weight:900;font-size:1.35rem;color:var(--agg);">—<span style="font-size:0.7rem;font-weight:500;color:var(--dim)">/mo</span></span>
     </div>
 
@@ -1290,8 +1318,8 @@
 
   <!-- DISCLAIMER -->
   <div class="disclaimer">
-    <strong>Estimates only.</strong> PSLF requires 120 qualifying monthly payments under a qualifying repayment plan while working full-time for a qualifying employer — forgiven balance is tax-free. RAP (Repayment Assistance Plan) payments are based on AGI bracket percentages and include the two government subsidies enacted in P.L. 119-21 (effective July 2026): unpaid monthly interest is waived (balance never grows due to underpayment), and a $50 minimum principal reduction is guaranteed each month a full payment is made. Forgiveness after 30 years may be taxable as ordinary income under current law. Standard Aggressive uses fixed 10-year amortization — no income adjustments. PSLF and RAP totals assume a 3% annual salary increase, causing payments to grow each year; Standard Repayment payments are fixed. This tool does not account for refinancing, loan consolidation, or tax liability on forgiven amounts. Always consult a certified student loan advisor or financial planner for personalized guidance.<br><br>
-    Reference: <a href="https://studentaid.gov/manage-loans/repayment/plans" target="_blank" rel="noopener noreferrer">studentaid.gov — Federal Repayment Plans</a>
+    <strong>Estimates only.</strong> PSLF estimates assume all 120 payments qualify and employment remains continuously eligible for the full 10-year period — actual eligibility depends on loan type, repayment plan, employer qualification, and payment timing; forgiven balance is tax-free. RAP (Repayment Assistance Plan) payments are based on AGI bracket percentages with a $10/month minimum for borrowers at or below $10,000 AGI, reduced by $50/month per dependent, and include the two government subsidies enacted in P.L. 119-21 (effective July 2026): unpaid monthly interest is waived (balance never grows due to underpayment), and a $50 minimum principal reduction is guaranteed each month a full payment is made. Tax treatment of RAP forgiveness after 30 years depends on federal law at the time forgiveness occurs and is subject to change. Standard Repayment uses fixed amortization on a term set by your loan balance — no income adjustments. PSLF and RAP totals assume a 3% annual salary increase, causing payments to grow each year; Standard Repayment payments are fixed. This tool does not account for refinancing, loan consolidation, or tax liability on forgiven amounts. Always consult a certified student loan advisor or financial planner for personalized guidance.<br><br>
+    Reference: <a href="https://studentaid.gov/manage-loans/repayment/plans" target="_blank" rel="noopener noreferrer">studentaid.gov — Federal Repayment Plans</a> &nbsp;·&nbsp; <a href="https://www.forbes.com/sites/adamminsky/2026/05/29/two-new-tiered-repayment-plans-for-student-loans-launch-in-4-weeks-with-major-differences/" target="_blank" rel="noopener noreferrer">Forbes — Two New Tiered Repayment Plans (May 2026)</a>
   </div>
 
 </main>
@@ -1339,7 +1367,7 @@
     return 0.10;
   }
   function rapBracketLabel(income) {
-    if (income <= 10000)  return 'Up to $10,000 — N/A';
+    if (income <= 10000)  return 'Up to $10,000 — $10/mo flat';
     if (income <= 20000)  return '$10,001 – $20,000 bracket';
     if (income <= 30000)  return '$20,001 – $30,000 bracket';
     if (income <= 40000)  return '$30,001 – $40,000 bracket';
@@ -1358,15 +1386,18 @@
     const salary     = Math.max(0, parseFloat(document.getElementById('annualSalary').value)     || 0);
     const hsa        = Math.max(0, parseFloat(document.getElementById('hsaContrib').value)       || 0);
     const retirement = Math.max(0, parseFloat(document.getElementById('retirementContrib').value)|| 0);
+    const dependents = Math.max(0, parseInt(document.getElementById('numDependents').value)      || 0);
     const monthRate  = rate / 12;
 
     /* Effective AGI = gross salary minus pre-tax deductions (HSA + 401k/403b) */
     const totalDeductions = hsa + retirement;
     const effectiveAGI    = Math.max(0, salary - totalDeductions);
+    /* Dependent reduction: $50/mo per dependent, applied after bracket rate */
+    const dependentReduction = dependents * 50;
 
-    /* RAP Year-1 rate & payment (based on effective AGI) */
+    /* RAP Year-1 rate & payment (based on effective AGI) — $10/mo floor, dependent reduction */
     const yr1Rate  = rapRate(effectiveAGI);
-    const rapPmtY1 = effectiveAGI * yr1Rate / 12;
+    const rapPmtY1 = Math.max(10, effectiveAGI * yr1Rate / 12 - dependentReduction);
 
     /* Helper: effective AGI in any future year — salary grows 3%/yr, deductions fixed */
     function agiForYear(yr) {
@@ -1382,7 +1413,7 @@
     for (let i = 0; i < 120; i++) {
       if (pslfBal <= 0) break;
       const agi      = agiForYear(Math.floor(i / 12));
-      const pmt      = agi * rapRate(agi) / 12;
+      const pmt      = Math.max(10, agi * rapRate(agi) / 12 - dependentReduction);
       const interest = pslfBal * monthRate;
       /* Interest subsidy: unpaid interest waived; $50 min principal match applied */
       const principalReduction = Math.min(Math.max(pmt - interest, 50), pslfBal);
@@ -1399,7 +1430,7 @@
     for (let i = 0; i < 360; i++) {
       if (rapBal <= 0) break;
       const agi      = agiForYear(Math.floor(i / 12));
-      const pmt      = agi * rapRate(agi) / 12;
+      const pmt      = Math.max(10, agi * rapRate(agi) / 12 - dependentReduction);
       const interest = rapBal * monthRate;
       /* Interest subsidy: unpaid interest waived; $50 min principal match applied */
       const principalReduction = Math.min(Math.max(pmt - interest, 50), rapBal);
@@ -1408,24 +1439,35 @@
     }
     const rapForgiven = Math.max(0, rapBal);
 
-    /* ---- Standard Aggressive: 10-year fixed amortization ---- */
+    /* ---- Standard Aggressive: term based on loan balance ---- */
+    const stdN     = balance >= 100000 ? 300 : balance >= 50000 ? 240 : balance >= 25000 ? 180 : 120;
+    const stdYears = stdN / 12;
     let stdMonthly;
     if (monthRate === 0) {
-      stdMonthly = balance / 120;
+      stdMonthly = balance / stdN;
     } else {
-      const f  = Math.pow(1 + monthRate, 120);
+      const f  = Math.pow(1 + monthRate, stdN);
       stdMonthly = balance * (monthRate * f) / (f - 1);
     }
-    const stdTotal    = stdMonthly * 120;
+    const stdTotal    = stdMonthly * stdN;
     const stdInterest = Math.max(0, stdTotal - balance);
 
-    /* Savings vs. Standard Aggressive (10-yr) */
+    /* Savings vs. Standard Aggressive */
     const pslfSavings = stdTotal - pslfTotal;
     const rapSavings  = stdTotal - rapTotal;
 
+    /* Highlight active tier row */
+    ['tier-row-10','tier-row-15','tier-row-20','tier-row-25'].forEach(id => {
+      const row = document.getElementById(id);
+      if (row) { row.style.background = ''; row.style.borderRadius = ''; }
+    });
+    const activeTier = stdYears === 10 ? 'tier-row-10' : stdYears === 15 ? 'tier-row-15' : stdYears === 20 ? 'tier-row-20' : 'tier-row-25';
+    const activeRow = document.getElementById(activeTier);
+    if (activeRow) { activeRow.style.background = 'rgba(37,99,235,0.10)'; activeRow.style.borderRadius = '4px'; }
+
     /* ---- Update DOM ---- */
     set('out-effectiveAGI', fmt(effectiveAGI));
-    set('out-rapRate',    yr1Rate > 0 ? (yr1Rate * 100).toFixed(0) + '%' : 'N/A');
+    set('out-rapRate',    yr1Rate > 0 ? (yr1Rate * 100).toFixed(0) + '%' : '$10/mo flat');
     set('out-rapBracket', rapBracketLabel(effectiveAGI));
     set('out-rapPayment', fmt(rapPmtY1));
 
@@ -1441,7 +1483,10 @@
     set('out-rapSavings',  fmt(rapSavings));
     set('out-rapForgiven', fmt(rapForgiven));
 
-    /* Standard Aggressive 10-yr card */
+    /* Standard Aggressive card */
+    set('out-stdYears',    stdYears + ' years');
+    set('out-stdPayments', stdN + ' payments');
+    set('out-stdYearsPro', stdYears);
     set('out-stdMonthly',  fmt(stdMonthly));
     set('out-stdTotal',    fmt(stdTotal));
     set('out-stdInterest', fmt(stdInterest));
@@ -1452,7 +1497,9 @@
     setHTML('tbl-pslfForgiven', fmt(pslfForgiven) + ' <span style="font-size:.8rem;font-weight:500;color:var(--dim)">(tax-free)</span>');
     set('tbl-rapMonthly',   fmt(rapMonthly));
     set('tbl-rapTotal',     fmt(rapTotal));
-    setHTML('tbl-rapForgiven',  fmt(rapForgiven)  + ' <span style="font-size:.8rem;font-weight:500;color:var(--dim)">(taxable)</span>');
+    setHTML('tbl-rapForgiven',  fmt(rapForgiven)  + ' <span style="font-size:.8rem;font-weight:500;color:var(--dim)">(tax law may change)</span>');
+    set('tbl-stdYears',     stdYears + '-yr');
+    set('tbl-stdYearsCol',  stdYears + ' yrs');
     set('tbl-stdMonthly',   fmt(stdMonthly));
     set('tbl-stdTotal',     fmt(stdTotal));
     /* Bar chart */
@@ -1491,15 +1538,17 @@
     const employerMo  = employerAnn / 12;
     const monthRate   = rate / 12;
 
-    /* Standard Aggressive baseline (10-year amortization) */
+    /* Standard Aggressive baseline — term based on loan balance */
+    const stdN2     = balance >= 100000 ? 300 : balance >= 50000 ? 240 : balance >= 25000 ? 180 : 120;
+    const stdYears2 = stdN2 / 12;
     let stdMonthly;
     if (monthRate === 0) {
-      stdMonthly = balance / 120;
+      stdMonthly = balance / stdN2;
     } else {
-      const f  = Math.pow(1 + monthRate, 120);
+      const f  = Math.pow(1 + monthRate, stdN2);
       stdMonthly = balance * (monthRate * f) / (f - 1);
     }
-    const stdTotal    = stdMonthly * 120;
+    const stdTotal    = stdMonthly * stdN2;
     const stdInterest = Math.max(0, stdTotal - balance);
 
     /* With employer contribution: same employee payment, employer adds on top */
@@ -1516,14 +1565,14 @@
     const caresTotalApplied= caresEmpTotal + caresEmprTotal;
     const caresInterest    = Math.max(0, caresTotalApplied - balance);
 
-    const savedMonths    = Math.max(0, 120 - caresMonths);
+    const savedMonths    = Math.max(0, stdN2 - caresMonths);
     const savedInterest  = Math.max(0, stdInterest - caresInterest);
     const savedYourTotal = Math.max(0, stdTotal     - caresEmpTotal);
 
     /* Update baseline column */
     set('adv-base-pmt',      fmt(stdMonthly));
-    set('adv-base-months',   '120 mo');
-    set('adv-base-years',    '10.0 yrs');
+    set('adv-base-months',   stdN2 + ' mo');
+    set('adv-base-years',    stdYears2.toFixed(1) + ' yrs');
     set('adv-base-interest', fmt(stdInterest));
     set('adv-base-total',    fmt(stdTotal));
 
@@ -1548,15 +1597,16 @@
     const rate      = Math.max(0, parseFloat(document.getElementById('interestRate').value)  || 0) / 100;
     const monthRate = rate / 12;
 
-    /* Baseline: 10-year Standard Aggressive */
+    /* Baseline: Standard Aggressive — term based on loan balance */
+    const baseN     = balance >= 100000 ? 300 : balance >= 50000 ? 240 : balance >= 25000 ? 180 : 120;
     let base30;
     if (monthRate === 0) {
-      base30 = balance / 120;
+      base30 = balance / baseN;
     } else {
-      const f = Math.pow(1 + monthRate, 120);
+      const f = Math.pow(1 + monthRate, baseN);
       base30  = balance * (monthRate * f) / (f - 1);
     }
-    const base30Total    = base30 * 120;
+    const base30Total    = base30 * baseN;
     const base30Interest = Math.max(0, base30Total - balance);
 
     /* Update baseline reminder above grid */
@@ -1580,7 +1630,7 @@
       const interest      = Math.max(0, totalPaid - balance);
       const extraPerMo    = Math.max(0, pmt - base30);
       const interestSaved = Math.max(0, base30Interest - interest);
-      const timeSavedMo   = 120 - n;
+      const timeSavedMo   = baseN - n;
       const timeSavedYr   = (timeSavedMo / 12).toFixed(1);
 
       const tile = document.createElement('div');
