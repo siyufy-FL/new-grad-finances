@@ -293,12 +293,12 @@ body{font-family:var(--sans);background:var(--bg);color:var(--stone);padding:0 0
       <div class="calc-val" id="ret-yr">—</div>
     </div>
     <div class="comp-row deductions-row">
-      <div><div class="row-label">HSA contribution<span class="pretax-badge">&#x2193; reduces AGI</span></div><div class="row-note">enter annual · 2026 limit: $4,300 individual / $8,550 family</div></div>
+      <div><div class="row-label">HSA contribution<span class="pretax-badge">&#x2193; reduces AGI</span></div><div class="row-note">enter annual · 2026 limit: $4,400 individual / $8,750 family</div></div>
       <div class="val neg"><span id="hsa-mo">—</span></div>
       <div class="val neg"><input class="editable" id="hsa-yr" value="0" oninput="calc()"></div>
     </div>
     <div class="comp-row deductions-row">
-      <div><div class="row-label">FSA contribution<span class="pretax-badge">&#x2193; reduces AGI</span></div><div class="row-note">enter annual · 2026 limit: $3,300</div></div>
+      <div><div class="row-label">FSA contribution<span class="pretax-badge">&#x2193; reduces AGI</span></div><div class="row-note">enter annual · 2026 limit: $3,400</div></div>
       <div class="val neg"><span id="fsa-mo">—</span></div>
       <div class="val neg"><input class="editable" id="fsa-yr" value="0" oninput="calc()"></div>
     </div>
@@ -532,6 +532,14 @@ body{font-family:var(--sans);background:var(--bg);color:var(--stone);padding:0 0
   <div class="export-row">
     <button class="btn primary" onclick="exportCSV()">Export for Google Sheets &#x2197;</button>
     <button class="btn" onclick="window.print()">Print / Save PDF &#x1F5A8;</button>
+  </div>
+
+  <div style="margin-top:1rem;padding:1rem 1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;">
+    <div>
+      <div style="font-size:13px;font-weight:700;color:var(--stone);margin-bottom:.2rem;">&#x1F492; Married or have a partner?</div>
+      <div style="font-size:12px;color:var(--muted);">Use the Household Budget Planner for dual income, married filing jointly, and Child Tax Credit calculations.</div>
+    </div>
+    <a href="budget2.html" style="display:inline-flex;align-items:center;gap:.4rem;font-size:13px;font-weight:700;color:#fff;background:var(--accent);border:1px solid var(--accent);border-radius:8px;padding:8px 18px;text-decoration:none;white-space:nowrap;flex-shrink:0;transition:opacity .15s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Household Budget Planner &#x2192;</a>
   </div>
 
   <p style="margin-top:1.5rem;font-size:11px;color:var(--muted);text-align:center;font-family:var(--mono)">newgradfinances.com &middot; plan today. build tomorrow.</p>
